@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Formulare</string>
+    <string name="app_name">Namen ändern: values/strings.xml/app_name</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -13,7 +13,7 @@
     <string name="projekt">Projekt</string>
     <string name="auftrag">Auftrag</string>
     <string name="begeher">Begeher</string>
-    <string name="_1_adresse">1. Adresse</string>
+    <string name="_1_header_information">1. Kopfinformationen</string>
     <string name="eigent_mer">Eigentümer</string>
     <string name="anschluss">Anschluss</string>
     <string name="_2_r_umlichkeiten">2. Räumlichkeiten</string>

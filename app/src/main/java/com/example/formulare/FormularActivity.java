@@ -65,14 +65,13 @@ public class FormularActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formular);
         binding = ActivityFormularBinding.inflate(getLayoutInflater());
+//        setSupportActionBar(binding.toolbar);
         setContentView(binding.getRoot());
-
-        Intent mainIntent = new Intent(FormularActivity.this, MainActivity.class);
 
         //TODO: Johannes Peter - Image Uplaod -- wenn das nicht läuft sollen sie es im zweifel einfach an ihre Email anhängen....
         //aktuell kann ich zwar bilder auswählen aber dann stürzt es ab... und geht wieder in die MainActivity...
         IVPreviewImage = findViewById(R.id.image_view);
-        binding.butonImageSelect.setOnClickListener(v -> {
+        binding.formularImagesInc.butonImageSelect.setOnClickListener(v -> {
             System.out.println("Clicked userbutton");
 
             imageChooser();
@@ -81,7 +80,6 @@ public class FormularActivity extends AppCompatActivity {
         createSignaturePads();
         createPDFButton();
 
-        binding.buttonPrevious.setOnClickListener(view -> FormularActivity.this.startActivity(mainIntent));
     }
 
     //Signature Pads
@@ -251,7 +249,7 @@ public class FormularActivity extends AppCompatActivity {
                         catch (IOException e) {
                             e.printStackTrace();
                         }
-                        binding.imageView.setImageBitmap(
+                        binding.formularImagesInc.imageView.setImageBitmap(
                                 selectedImageBitmap);
                     }
                 }
