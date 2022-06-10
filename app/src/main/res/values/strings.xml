@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Formulare</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="buchungsprotokoll">Buchungsprotokoll</string>
+    <string name="projekt">Projekt</string>
+    <string name="auftrag">Auftrag</string>
+    <string name="begeher">Begeher</string>
+    <string name="_1_adresse">1. Adresse</string>
+    <string name="eigent_mer">Eigentümer</string>
+    <string name="anschluss">Anschluss</string>
+    <string name="_2_r_umlichkeiten">2. Räumlichkeiten</string>
+    <string name="art">Art</string>
+    <string name="gewerblich">Gewerblich</string>
+    <string name="privat">Privat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="agreement">I agree the terms and conditions.</string>
+    <string name="clear_pad">Clear Pad</string>
+    <string name="save_signature">Save Signature</string>
+
+</resources>
