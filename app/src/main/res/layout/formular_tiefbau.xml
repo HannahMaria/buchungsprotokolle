@@ -56,13 +56,13 @@
                         android:layout_height="wrap_content">
 
                         <RadioButton
-                            android:id="@+id/yesRadio"
+                            android:id="@+id/yesTiefbauRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Ja" />
 
                         <RadioButton
-                            android:id="@+id/noRadio"
+                            android:id="@+id/noTiefbauRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Nein"

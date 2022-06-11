@@ -4,88 +4,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="4dp"
     tools:context=".FormularActivity">
     <!--TODO: Johannes Peter - volle Breite -->
+
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         app:flow_horizontalAlign="center"
         app:flow_verticalAlign="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
 
-        <LinearLayout
-            android:layout_width="408dp"
-            android:layout_height="900dp"
-            android:orientation="vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/button_second"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <TextView
                 android:id="@+id/topic"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="@string/buchungsprotokoll"
                 android:textAlignment="center"
                 android:textSize="34sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <include
+                android:id="@+id/formular_header_inc"
                 layout="@layout/formular_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topic" />
 
             <include
+                android:id="@+id/formular_kind_inc"
                 layout="@layout/formular_kind"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/formular_header_inc" />
 
             <include
+                android:id="@+id/formular_tiefbau_inc"
                 layout="@layout/formular_tiefbau"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/formular_kind_inc" />
 
             <include
+                android:id="@+id/formular_bestand_inc"
                 layout="@layout/formular_bestand"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/formular_tiefbau_inc" />
 
             <include
                 android:id="@+id/formular_images_inc"
                 layout="@layout/formular_images"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/formular_bestand_inc" />
 
             <include
+                android:id="@+id/formular_signature_inc"
                 layout="@layout/formular_signature"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/formular_images_inc" />
 
             <Button
                 android:id="@+id/button_previous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/previous"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/formular_signature_inc" />
 
             <Button
                 android:id="@+id/button_generate_pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PDF Generieren"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/formular_signature_inc" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
