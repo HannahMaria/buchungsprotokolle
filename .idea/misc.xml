@@ -3,12 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/drawable/ic_close.xml" value="0.1505" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/activity_cricketers.xml" value="0.1" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/activity_dynamic_formular.xml" value="0.184375" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/activity_formular.xml" value="0.23805532271584243" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/activity_formular_row.xml" value="0.184375" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/activity_main.xml" value="0.144" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/content_main.xml" value="0.184375" />
+        <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/formular_header.xml" value="0.19375" />
+        <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/formular_images.xml" value="0.1" />
+        <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/formular_kind.xml" value="0.2" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/fragment_dynamic.xml" value="0.184375" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/fragment_first.xml" value="0.3070652173913043" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/fragment_second.xml" value="0.2" />
@@ -16,15 +20,6 @@
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/row_add_field.xml" value="0.13385416666666666" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/layout/row_cricketer.xml" value="0.184375" />
         <entry key="..\:/Users/hanna/AndroidStudioProjects/Formulare/app/src/main/res/menu/menu_main.xml" value="0.20104166666666667" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/activity_formular.xml" value="0.264" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/content_main.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/formular_bestand.xml" value="0.25769927536231885" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/formular_header.xml" value="0.536" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/formular_images.xml" value="0.25769927536231885" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/formular_kind.xml" value="0.25769927536231885" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/formular_signature.xml" value="0.2" />
-        <entry key="..\:/Users/johan/Desktop/Workspace/General/Android/buchungsprotokolle/app/src/main/res/layout/formular_tiefbau.xml" value="0.536" />
       </map>
     </option>
   </component>

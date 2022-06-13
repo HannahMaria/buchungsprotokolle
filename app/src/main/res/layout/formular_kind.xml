@@ -74,7 +74,7 @@
                     android:id="@+id/wennprivateText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Wenn Privat Haus-Art:"
+                    android:text="Wenn Privat: "
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -88,6 +88,12 @@
                         android:id="@+id/privateRadios"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Haus-Art:" />
 
                         <RadioButton
                             android:id="@+id/oneFamilyRadio"

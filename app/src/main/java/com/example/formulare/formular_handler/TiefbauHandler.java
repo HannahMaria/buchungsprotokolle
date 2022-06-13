@@ -20,4 +20,20 @@ public class TiefbauHandler {
         overground_EDT = formularTiefbauBinding.groundInput;
         length_EDT = formularTiefbauBinding.lengthInput;
     }
+
+    public boolean getNecessary_RB() {
+        return necessary_RB.isChecked();
+    }
+
+    public boolean getNotNecessary_RB() {
+        return notNecessary_RB.isChecked();
+    }
+
+    public String getOverground_EDT() {
+        return overground_EDT.getText().toString();
+    }
+
+    public String getLength_EDT() {
+        return length_EDT.getText().toString();
+    }
 }

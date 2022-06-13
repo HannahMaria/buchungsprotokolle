@@ -30,6 +30,8 @@ public class SignatureHandler {
     private final Button mSaveButton_Begeher;
     private final Button mClearButton_Kunde;
     private final Button mSaveButton_Kunde;
+    public Bitmap signatureBitmapBegeher;
+    public Bitmap signatureBitmapKunde;
 
     public SignatureHandler(@NonNull FormularActivity formularActivity, @NonNull FormularSignatureBinding formularSignatureBinding) {
         this.formularActivity = formularActivity;
@@ -80,8 +82,8 @@ public class SignatureHandler {
         mClearButton_Begeher.setOnClickListener(view -> mSignaturePad_Begeher.clear());
         mClearButton_Kunde.setOnClickListener(view -> mSignaturePad_Kunde.clear());
         mSaveButton_Begeher.setOnClickListener(view -> {
-            Bitmap signatureBitmap = mSignaturePad_Begeher.getSignatureBitmap();
-            if (addJpgSignatureToGallery(signatureBitmap, "Begeher")) {
+            signatureBitmapBegeher = mSignaturePad_Begeher.getSignatureBitmap();
+            if (addJpgSignatureToGallery(signatureBitmapBegeher, "Begeher")) {
                 Toast.makeText(formularActivity, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(formularActivity, "Unable to store the signature", Toast.LENGTH_SHORT).show();
@@ -93,8 +95,8 @@ public class SignatureHandler {
             }
         });
         mSaveButton_Kunde.setOnClickListener(view -> {
-            Bitmap signatureBitmap = mSignaturePad_Kunde.getSignatureBitmap();
-            if (addJpgSignatureToGallery(signatureBitmap, "Kunde")) {
+            signatureBitmapKunde = mSignaturePad_Kunde.getSignatureBitmap();
+            if (addJpgSignatureToGallery(signatureBitmapKunde, "Kunde")) {
                 Toast.makeText(formularActivity, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(formularActivity, "Unable to store the signature", Toast.LENGTH_SHORT).show();

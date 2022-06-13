@@ -73,27 +73,28 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/formular_tiefbau_inc" />
 
-            <include
+         <!--   <include
                 android:id="@+id/formular_images_inc"
                 layout="@layout/formular_images"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/formular_bestand_inc" />
+                app:layout_constraintTop_toBottomOf="@+id/formular_bestand_inc"
+                  />-->
 
             <include
                 android:id="@+id/formular_signature_inc"
                 layout="@layout/formular_signature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/formular_images_inc" />
+                app:layout_constraintTop_toBottomOf="@+id/formular_bestand_inc"/>
 
-            <Button
+           <!-- <Button
                 android:id="@+id/button_previous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/previous"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/formular_signature_inc" />
+                app:layout_constraintTop_toBottomOf="@+id/formular_signature_inc" />-->
 
             <Button
                 android:id="@+id/button_generate_pdf"

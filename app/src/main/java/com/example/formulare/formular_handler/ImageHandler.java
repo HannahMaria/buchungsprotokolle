@@ -1,11 +1,13 @@
 package com.example.formulare.formular_handler;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,29 +31,57 @@ import java.text.DateFormat;
 public class ImageHandler {
 
     private final FormularActivity formularActivity;
-    private final ActivityResultLauncher<Intent> activityResultLauncher;
+   // private final ActivityResultLauncher<Intent> activityResultLauncher;
     private final ImageView imageView;
     private final Button selectImage_BTN;
-    private int PICK_IMAGE_MULTIPLE = 1;
+    private final int PICK_IMAGE_MULTIPLE = 1;
+    private final int REQUEST_PHOTO_PICKER_SINGLE_SELECT = 2;
+    private final int REQUEST_PHOTO_PICKER_MULTI_SELECT = 3;
 
     public ImageHandler(@NonNull FormularActivity formularActivity, @NonNull FormularImagesBinding formularImagesBinding) {
         this.formularActivity = formularActivity;
         imageView = formularImagesBinding.imageView;
         selectImage_BTN = formularImagesBinding.butonImageSelect;
-        activityResultLauncher = formularActivity.registerForActivityResult(
+      /*  activityResultLauncher = formularActivity.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                callback -> onActivityResults(callback.getResultCode(), callback.getData())
-        );
+                callback -> onActivityResult(1, callback.getResultCode(), callback.getData())
+        );*/
         //TODO: Johannes Peter - Image Uplaod -- wenn das nicht läuft sollen sie es im zweifel einfach an ihre Email anhängen....
-        selectImage_BTN.setOnClickListener(view -> activityResultLauncher.launch(imageChooser()));
+       // selectImage_BTN.setOnClickListener(view -> activityResultLauncher.launch(imageChooser()));
     }
 
     private Intent imageChooser() {
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.setType("image/*");
-        chooseFile.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/pdf", "image/*"});
-        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-        return chooseFile;
+        Intent intent = new Intent();//MediaS*tore.ACTION_PICK_IMAGES
+        intent.setType("image/*");
+       // activityResultLauncher.launch(intent);
+        return intent;
+    }
+
+    protected void onActivityResult(
+            int requestCode, int resultCode, final Intent data) {
+
+        if (resultCode != Activity.RESULT_OK) {
+            // Handle error
+            return;
+        }
+        Uri currentUri;
+
+        switch (requestCode) {
+            case REQUEST_PHOTO_PICKER_SINGLE_SELECT:
+                // Get photo picker response for single select.
+                currentUri = data.getData();
+                imageView.setImageURI(currentUri);
+                // Do stuff with the photo/video URI.
+                return;
+            case REQUEST_PHOTO_PICKER_MULTI_SELECT:
+                // Get photo picker response for multi select
+                for (int i = 0; i < data.getClipData().getItemCount(); i++) {
+                    currentUri = data.getClipData().getItemAt(i).getUri();
+
+                    imageView.setImageURI(currentUri);
+                    return;
+                }
+        }
     }
 
     public void onActivityResults(int resultCode, @Nullable Intent data) {
