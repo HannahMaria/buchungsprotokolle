@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -79,32 +80,28 @@ public class SignatureHandler {
                 mClearButton_Begeher.setEnabled(false);
             }
         });
-        mClearButton_Begeher.setOnClickListener(view -> mSignaturePad_Begeher.clear());
-        mClearButton_Kunde.setOnClickListener(view -> mSignaturePad_Kunde.clear());
+        mClearButton_Begeher.setOnClickListener(view -> {
+            mSignaturePad_Begeher.clear();
+            mSaveButton_Begeher.setVisibility(View.VISIBLE);
+        });
+        mClearButton_Kunde.setOnClickListener(view -> {
+            mSignaturePad_Kunde.clear();
+            mSaveButton_Kunde.setVisibility(View.VISIBLE);
+        });
         mSaveButton_Begeher.setOnClickListener(view -> {
             signatureBitmapBegeher = mSignaturePad_Begeher.getSignatureBitmap();
-            if (addJpgSignatureToGallery(signatureBitmapBegeher, "Begeher")) {
-                Toast.makeText(formularActivity, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
+            if (signatureBitmapBegeher != null) {
+                mSaveButton_Begeher.setVisibility(View.GONE);
             } else {
-                Toast.makeText(formularActivity, "Unable to store the signature", Toast.LENGTH_SHORT).show();
-            }
-            if (addSvgSignatureToGallery(mSignaturePad_Begeher.getSignatureSvg())) {
-                Toast.makeText(formularActivity, "SVG Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(formularActivity, "Unable to store the SVG signature", Toast.LENGTH_SHORT).show();
+                Toast.makeText(formularActivity, "Unterschrift konnte nicht verarbeitet werden!", Toast.LENGTH_SHORT).show();
             }
         });
         mSaveButton_Kunde.setOnClickListener(view -> {
             signatureBitmapKunde = mSignaturePad_Kunde.getSignatureBitmap();
-            if (addJpgSignatureToGallery(signatureBitmapKunde, "Kunde")) {
-                Toast.makeText(formularActivity, "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
+            if (signatureBitmapKunde != null) {
+                mSaveButton_Kunde.setVisibility(View.GONE);
             } else {
-                Toast.makeText(formularActivity, "Unable to store the signature", Toast.LENGTH_SHORT).show();
-            }
-            if (addSvgSignatureToGallery(mSignaturePad_Kunde.getSignatureSvg())) {
-                Toast.makeText(formularActivity, "SVG Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(formularActivity, "Unable to store the SVG signature", Toast.LENGTH_SHORT).show();
+                Toast.makeText(formularActivity, "Unterschrift konnte nicht verarbeitet werden!", Toast.LENGTH_SHORT).show();
             }
         });
     }

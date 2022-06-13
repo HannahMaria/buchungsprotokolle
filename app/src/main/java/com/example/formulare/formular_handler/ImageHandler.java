@@ -105,7 +105,7 @@ public class ImageHandler {
                 imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(formularActivity, "Not supporetd file selected", Toast.LENGTH_LONG).show();
+                Toast.makeText(formularActivity, "Ausgewähltes Dateiformat wird nicht unterstützt!", Toast.LENGTH_LONG).show();
             }
 
             //alternative
