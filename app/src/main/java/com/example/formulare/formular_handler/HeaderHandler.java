@@ -7,38 +7,32 @@ import androidx.annotation.NonNull;
 import com.example.formulare.databinding.FormularHeaderBinding;
 
 public class HeaderHandler {
-    private final EditText project_EDT;
-    private final EditText order_EDT;
-    private final EditText owner_EDT;
-    private final EditText person_EDT;
-    private final EditText connection_EDT;
+    private final EditText project;
+    private final EditText order;
+    private final EditText person;
+    private final EditText adress;
 
     public HeaderHandler(@NonNull FormularHeaderBinding formularHeaderBinding) {
-        project_EDT = formularHeaderBinding.projectInput;
-        order_EDT = formularHeaderBinding.orderInput;
-        owner_EDT = formularHeaderBinding.ownerInput;
-        person_EDT = formularHeaderBinding.personInput;
-        connection_EDT = formularHeaderBinding.connectionInput;
+        project = formularHeaderBinding.projectInput;
+        order = formularHeaderBinding.orderInput;
+        person = formularHeaderBinding.personInput;
+        adress = formularHeaderBinding.adressInput;
     }
 
     public String getProject() {
-        return project_EDT.getText().toString();
+        return project.getText().toString();
     }
 
     public String getOrder() {
-        return order_EDT.getText().toString();
-    }
-
-    public String getOwner() {
-        return owner_EDT.getText().toString();
+        return order.getText().toString();
     }
 
     public String getPerson() {
-        return person_EDT.getText().toString();
+        return person.getText().toString();
     }
 
-    public String getConnection() {
-        return connection_EDT.getText().toString();
+    public String getAdress() {
+        return adress.getText().toString();
     }
 
 }

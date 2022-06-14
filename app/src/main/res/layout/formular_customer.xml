@@ -15,10 +15,10 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/topic1"
+            android:id="@+id/topic2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/header_information"
+            android:text="@string/kundeninformationen"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,114 +26,105 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/projectLayout"
+            android:id="@+id/ownerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topic1">
+            app:layout_constraintTop_toBottomOf="@+id/topic2">
 
             <TextView
-                android:id="@+id/projectText"
+                android:id="@+id/ownerText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/projekt"
+                android:text="@string/eigent_mer"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/projectInput"
+                android:id="@+id/ownerInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/projekt"
+                android:hint="@string/eigent_mer"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName" />
+                android:inputType="textPostalAddress"
+                tools:ignore="SpeakableTextPresentCheck" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/orderLayout"
+            android:id="@+id/emailLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/projectLayout">
+            app:layout_constraintTop_toBottomOf="@+id/ownerLayout">
 
             <TextView
-                android:id="@+id/orderText"
+                android:id="@+id/emailText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/auftrag"
+                android:text="@string/email"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/orderInput"
+                android:id="@+id/emailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/auftrag"
+                android:hint="@string/email"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName" />
+                android:inputType="textEmailAddress" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/adressLayout"
+            android:id="@+id/dateLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/orderLayout">
+            app:layout_constraintTop_toBottomOf="@+id/emailLayout">
 
             <TextView
-                android:id="@+id/adressText"
+                android:id="@+id/dateText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/adresse"
+                android:text="@string/ausf_hrungstermin"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <RadioGroup
+                android:id="@+id/dateRadios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/yesDateRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ja" />
+
+                <RadioButton
+                    android:id="@+id/noDateRadio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nein" />
+            </RadioGroup>
+
             <EditText
-                android:id="@+id/adressInput"
+                android:id="@+id/dateInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/adresse"
+                android:hint="@string/datum"
                 android:importantForAutofill="no"
-                android:inputType="textPostalAddress" />
+                android:inputType="date" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/personLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/adressLayout">
-
-            <TextView
-                android:id="@+id/personText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/begeher"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/personInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/begeher"
-                android:importantForAutofill="no"
-                android:inputType="textPersonName" />
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

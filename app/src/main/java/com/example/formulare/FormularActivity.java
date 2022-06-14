@@ -2,16 +2,12 @@ package com.example.formulare;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.formulare.databinding.ActivityFormularBinding;
 import com.example.formulare.formular_handler.BestandHandler;
+import com.example.formulare.formular_handler.CustomerHandler;
 import com.example.formulare.formular_handler.HeaderHandler;
 import com.example.formulare.formular_handler.KindHandler;
 import com.example.formulare.formular_handler.SignatureHandler;
@@ -29,7 +26,6 @@ import com.example.formulare.formular_handler.TiefbauHandler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -44,6 +40,7 @@ public class FormularActivity extends AppCompatActivity {
     //  private ImageHandler imageHandler;
     private KindHandler kindHandler;
     private SignatureHandler signatureHandler;
+    private CustomerHandler customerHandler;
     private TiefbauHandler tiefbauHandler;
     int pageWidth = 2480;
     int pageHeight = 3508;
@@ -67,6 +64,7 @@ public class FormularActivity extends AppCompatActivity {
         // imageHandler = new ImageHandler(this, binding.formularImagesInc);
         kindHandler = new KindHandler(binding.formularKindInc);
         signatureHandler = new SignatureHandler(this, binding.formularSignatureInc);
+        customerHandler = new CustomerHandler(binding.formularCustomerInc);
         tiefbauHandler = new TiefbauHandler(binding.formularTiefbauInc);
     }
 
@@ -98,7 +96,7 @@ public class FormularActivity extends AppCompatActivity {
             titlePaint.setTextAlign(Paint.Align.CENTER);
             titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             titlePaint.setTextSize(120);
-            canvas.drawText("Buchungsprotokoll", pageWidth / 2, 160, titlePaint);
+            canvas.drawText("Begehungsprotokoll", pageWidth / 2, 160, titlePaint);
 
             //DATum
             titlePaint.setTextSize(70);
@@ -142,14 +140,14 @@ public class FormularActivity extends AppCompatActivity {
                 return;
             }
             canvas.drawBitmap(signatureHandler.signatureBitmapKunde, (pageWidth / 2) + 40, pageHeight - 600, paint);
-            canvas.drawText(headerHandler.getOwner(), (pageWidth / 2) + 160, pageHeight - 100, paint);
+            canvas.drawText(customerHandler.getOwner(), (pageWidth / 2) + 160, pageHeight - 100, paint);
 
             pdf.finishPage(page1);
 
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/" + headerHandler.getProject() + "-" + headerHandler.getConnection() + System.currentTimeMillis() + ".pdf");
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/" + headerHandler.getProject() + "-" + headerHandler.getAdress() + System.currentTimeMillis() + ".pdf");
 
             pdf.writeTo(new FileOutputStream(file));
-            Toast.makeText(FormularActivity.this, "PDF erstellt - im Ornder Downloads!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FormularActivity.this, "PDF erstellt - im Ordner Downloads!", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -210,12 +208,20 @@ public class FormularActivity extends AppCompatActivity {
         canvas.drawText("Auftrag:", 80, 580, paint);
         canvas.drawText(headerHandler.getOrder(), pageWidth / 2, 580, paint);
 
-        if (headerHandler.getOwner().isEmpty()) {
+        if (customerHandler.getOwner().isEmpty()) {
             Toast.makeText(this, "Eigentümer fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
         canvas.drawText("Eigentümer:", 80, 660, paint);
-        canvas.drawText(headerHandler.getOwner(), pageWidth / 2, 660, paint);
+        canvas.drawText(customerHandler.getOwner(), pageWidth / 2, 660, paint);
+
+        if (customerHandler.getOwner().isEmpty()) {
+            Toast.makeText(this, "E-Mail fehlt!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        //TODO:NächsteZeile
+        canvas.drawText("Eigentümer E-Mail:", 80, 660, paint);
+        canvas.drawText(customerHandler.getEmail(), pageWidth / 2, 660, paint);
 
         if (headerHandler.getPerson().isEmpty()) {
             Toast.makeText(this, "Begeher fehlt!", Toast.LENGTH_SHORT).show();
@@ -224,12 +230,12 @@ public class FormularActivity extends AppCompatActivity {
         canvas.drawText("Begeher:", 80, 740, paint);
         canvas.drawText(headerHandler.getPerson(), pageWidth / 2, 740, paint);
 
-        if (headerHandler.getConnection().isEmpty()) {
-            Toast.makeText(this, "Anschluss fehlt!", Toast.LENGTH_SHORT).show();
+        if (headerHandler.getAdress().isEmpty()) {
+            Toast.makeText(this, "Adresse fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        canvas.drawText("Anschluss:", 80, 820, paint);
-        canvas.drawText(headerHandler.getConnection(), pageWidth / 2, 820, paint);
+        canvas.drawText("Adresse:", 80, 820, paint);
+        canvas.drawText(headerHandler.getAdress(), pageWidth / 2, 820, paint);
         return true;
     }
 
@@ -281,13 +287,13 @@ public class FormularActivity extends AppCompatActivity {
         paint.setStyle(Paint.Style.FILL);
 
         canvas.drawText("Tiefbau notwendig?", 80, 1380, paint);
-        String text = tiefbauHandler.getNecessary_RB() ? "Ja" : "Nein";
+        String text = tiefbauHandler.getNecessary() ? "Ja" : "Nein";
         canvas.drawText(text, pageWidth / 3, 1380, paint);
-        if (!tiefbauHandler.getNecessary_RB() && !tiefbauHandler.getNotNecessary_RB()) {
+        if (!tiefbauHandler.getNecessary() && !tiefbauHandler.getNotNecessary()) {
             Toast.makeText(this, "Tiefbau Information fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (tiefbauHandler.getNecessary_RB()) {
+     /*   if (tiefbauHandler.getNecessary_RB()) {
             if (tiefbauHandler.getLength_EDT().isEmpty()) {
                 Toast.makeText(this, "Länge fehlt!", Toast.LENGTH_SHORT).show();
                 return false;
@@ -300,7 +306,7 @@ public class FormularActivity extends AppCompatActivity {
             }
             canvas.drawText("Oberflächenart:", 80, 1460, paint);
             canvas.drawText(tiefbauHandler.getOverground_EDT(), 80, 1540, paint);
-        }
+        }*/
         return true;
     }
 
@@ -318,19 +324,31 @@ public class FormularActivity extends AppCompatActivity {
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setStyle(Paint.Style.FILL);
         if (!bestandHandler.noCable() && !bestandHandler.yesCable()) {
-            Toast.makeText(this, "Leitungen Information fehlt!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Leitungswege Information fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        canvas.drawText("Leitungen bekannt?:", 80, 1820, paint);
-        String text = bestandHandler.yesCable() ? "Ja" : "Nein";
-        canvas.drawText(text, pageWidth / 2, 1820, paint);
+        canvas.drawText("Bekannte Leitungswege, welche den geplanten Trassenverlauf stören:", 80, 1820, paint);
+        if (bestandHandler.yesCable()) {
+            if (!bestandHandler.getCableInput().isEmpty()) {
+                Toast.makeText(this, "Nutzbare Einführungen Information fehlt!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            //TODO: nächste Zeile
+            canvas.drawText("Ja - " + bestandHandler.getCableInput(), pageWidth / 3 * 2, 1820, paint);
+
+        } else {
+            canvas.drawText("Nein", pageWidth / 3 * 2, 1820, paint);
+        }
+
         if (!bestandHandler.yesIn() && !bestandHandler.noIn()) {
             Toast.makeText(this, "Nutzbare Einführungen Information fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
         canvas.drawText("Nutzbare Einführungen:", 80, 1900, paint);
-        text = bestandHandler.yesIn() ? "Ja" : "Nein";
+        String text = bestandHandler.yesIn() ? "Ja" : "Nein";
         canvas.drawText(text, pageWidth / 2, 1900, paint);
+
+
         return true;
     }
 }

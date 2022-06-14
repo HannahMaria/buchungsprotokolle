@@ -25,28 +25,26 @@
                 android:id="@+id/topic4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="4. Bestand"
+                android:text="@string/bestand"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/cableLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/cableText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Leitungen bekannt:"
+                        android:text="@string/leitungen"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -59,16 +57,24 @@
                             android:id="@+id/yesCableRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Ja" />
+                            android:text="@string/ja" />
 
                         <RadioButton
                             android:id="@+id/noCableRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nein"
+                            android:text="@string/nein"
                             tools:ignore="TouchTargetSizeCheck" />
 
                     </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/cableInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Welche bekannten Leitungswege?"
+                        android:inputType="textPersonName" />
 
                 </LinearLayout>
 
@@ -82,7 +88,7 @@
                         android:id="@+id/inText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nutzbare Einführungen:"
+                        android:text="@string/einf_hrungen"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -95,13 +101,13 @@
                             android:id="@+id/yesInRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Ja" />
+                            android:text="@string/ja" />
 
                         <RadioButton
                             android:id="@+id/noInRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nein"
+                            android:text="@string/nein"
                             tools:ignore="TouchTargetSizeCheck" />
                     </RadioGroup>
                 </LinearLayout>

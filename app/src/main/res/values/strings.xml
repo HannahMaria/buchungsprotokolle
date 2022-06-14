@@ -1,29 +1,54 @@
 <resources>
-    <string name="app_name">Namen ändern: values/strings.xml/app_name</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="buchungsprotokoll">Buchungsprotokoll</string>
+    <string name="app_name">Kusel - Protokolle</string>
+    <string name="action_settings">Settings</string>
+    <string name="first_fragment_label">First Fragment</string>
+
+    <string name="begehungsprotokoll">Begehungsprotokoll</string>
+    <string name="header_information">1. Kopfinformationen</string>
     <string name="projekt">Projekt</string>
     <string name="auftrag">Auftrag</string>
+    <string name="adresse">Adresse</string>
     <string name="begeher">Begeher</string>
-    <string name="_1_header_information">1. Kopfinformationen</string>
+
+    <string name="kundeninformationen">2. Kundeninformationen</string>
     <string name="eigent_mer">Eigentümer</string>
-    <string name="anschluss">Anschluss</string>
-    <string name="_2_r_umlichkeiten">2. Räumlichkeiten</string>
+    <string name="email">E-Mail</string>
+    <string name="ausf_hrungstermin">Ausführungstermin notwendig?</string>
+    <string name="ja">Ja</string>
+    <string name="nein">Nein</string>
+    <string name="ausf_hrungstermin_wann">Wenn Ja, Wann?</string>
+    <string name="datum">Datum</string>
+
+    @string/
+    <string name="r_umlichkeiten">3. Räumlichkeiten</string>
     <string name="art">Art</string>
     <string name="gewerblich">Gewerblich</string>
     <string name="privat">Privat</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="agreement">I agree the terms and conditions.</string>
-    <string name="clear_pad">Clear Pad</string>
-    <string name="save_signature">Save Signature</string>
+    <string name="privat_wenn">Wenn Privat</string>
+    <string name="haus_art">Haus-Art</string>
+    <string name="einfamilien">Einfamilien Haus</string>
+    <string name="mehrfamilien">Mehrfamilien Haus</string>
+
+
+    <string name="tiefbau">4. Tiefbau</string>
+    <string name="notwendig">notwendig?</string>
+    <string name="l_nge">Länge</string>
+
+
+    <string name="bestand">5. Bestand</string>
+    <string name="leitungen">Bekannte Leitungswege, welche den geplanten Trassenverlauf stören?</string>
+    <string name="leitungen_wenn">Wenn Ja, welche?</string>
+    <string name="einf_hrungen">Nutzbare Einführungen</string>
+    <string name="sonstige">Sonstige Absprachen</string>
+
+
+    <string name="unterschriften">6. Unterschriften</string>
+    <string name="kunde">Kunde</string>
+
+
+    <string name="speichern">Speichern</string>
+    <string name="l_schen">Löschen</string>
+
 
 </resources>

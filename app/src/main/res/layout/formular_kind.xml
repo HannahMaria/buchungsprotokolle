@@ -26,7 +26,7 @@
                 android:id="@+id/topic7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/_2_r_umlichkeiten"
+                android:text="@string/r_umlichkeiten"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -64,51 +64,39 @@
                 </RadioGroup>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/wennprivateLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/wennprivateText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Wenn Privat: "
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
                 <LinearLayout
                     android:id="@+id/privateLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/textViewKind"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/haus_art"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
                     <RadioGroup
                         android:id="@+id/privateRadios"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Haus-Art:" />
+
 
                         <RadioButton
                             android:id="@+id/oneFamilyRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Einfamilien Haus" />
+                            android:text="@string/einfamilien" />
 
                         <RadioButton
                             android:id="@+id/moreFamilyRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mehrfamilien Haus"
+                            android:text="@string/mehrfamilien"
                             tools:ignore="TouchTargetSizeCheck" />
                     </RadioGroup>
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

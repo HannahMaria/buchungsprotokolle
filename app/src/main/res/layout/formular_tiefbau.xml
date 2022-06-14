@@ -25,7 +25,7 @@
                 android:id="@+id/topic3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="3. Tiefbau"
+                android:text="@string/tiefbau"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -39,14 +39,13 @@
                     android:id="@+id/necessaryLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/necessaryText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="notwendig?"
+                        android:text="@string/notwendig"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -59,80 +58,104 @@
                             android:id="@+id/yesTiefbauRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Ja" />
+                            android:text="@string/ja" />
 
                         <RadioButton
                             android:id="@+id/noTiefbauRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nein"
+                            android:text="@string/nein"
                             tools:ignore="TouchTargetSizeCheck" />
                     </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/wennJaLayout"
+                    android:id="@+id/groundLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/wennJaText"
+                        android:id="@+id/groundText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Wenn Ja:"
+                        android:text="Oberflächenart"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
-                        android:id="@+id/groundLayout"
+                        android:id="@+id/groundLayout2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/groundText"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:id="@+id/withoutLayout"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                            android:text="Oberflächenart"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            <CheckBox
+                                android:id="@+id/without"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ohne Oberfläche" />
 
-                        <EditText
-                            android:id="@+id/groundInput"
-                            android:layout_width="match_parent"
+                            <EditText
+                                android:id="@+id/lengthWithoutInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/l_nge"
+                                android:inputType="textPersonName" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/pflasterLayout"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                            android:ems="10"
-                            android:inputType="textPersonName" />
-                    </LinearLayout>
+                            <CheckBox
+                                android:id="@+id/pflaster"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Plaster" />
 
-                    <LinearLayout
-                        android:id="@+id/lengthLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                            <EditText
+                                android:id="@+id/lengthPlasterInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/l_nge"
+                                android:inputType="textPersonName" />
+                        </LinearLayout>
 
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/lengthText"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:id="@+id/asphaltLayout"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                            android:text="Länge"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            <CheckBox
+                                android:id="@+id/asphalt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Aspahlt" />
 
-                        <EditText
-                            android:id="@+id/lengthInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            <EditText
+                                android:id="@+id/lengthAsphaltInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="@string/l_nge"
+                                android:inputType="textPersonName" />
 
-                            android:ems="10"
-                            android:inputType="textPersonName" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
