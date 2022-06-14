@@ -7,14 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -31,7 +28,7 @@ import java.text.DateFormat;
 public class ImageHandler {
 
     private final FormularActivity formularActivity;
-   // private final ActivityResultLauncher<Intent> activityResultLauncher;
+    // private final ActivityResultLauncher<Intent> activityResultLauncher;
     private final ImageView imageView;
     private final Button selectImage_BTN;
     private final int PICK_IMAGE_MULTIPLE = 1;
@@ -47,13 +44,13 @@ public class ImageHandler {
                 callback -> onActivityResult(1, callback.getResultCode(), callback.getData())
         );*/
         //TODO: Johannes Peter - Image Uplaod -- wenn das nicht läuft sollen sie es im zweifel einfach an ihre Email anhängen....
-       // selectImage_BTN.setOnClickListener(view -> activityResultLauncher.launch(imageChooser()));
+        // selectImage_BTN.setOnClickListener(view -> activityResultLauncher.launch(imageChooser()));
     }
 
     private Intent imageChooser() {
         Intent intent = new Intent();//MediaS*tore.ACTION_PICK_IMAGES
         intent.setType("image/*");
-       // activityResultLauncher.launch(intent);
+        // activityResultLauncher.launch(intent);
         return intent;
     }
 
