@@ -83,15 +83,19 @@ public class SignatureHandler {
         mClearButton_Begeher.setOnClickListener(view -> {
             mSignaturePad_Begeher.clear();
             mSaveButton_Begeher.setVisibility(View.VISIBLE);
+            mSignaturePad_Begeher.setEnabled(true);
         });
         mClearButton_Kunde.setOnClickListener(view -> {
             mSignaturePad_Kunde.clear();
             mSaveButton_Kunde.setVisibility(View.VISIBLE);
+            mSignaturePad_Kunde.setEnabled(true);
         });
         mSaveButton_Begeher.setOnClickListener(view -> {
             signatureBitmapBegeher = mSignaturePad_Begeher.getSignatureBitmap();
             if (signatureBitmapBegeher != null) {
                 mSaveButton_Begeher.setVisibility(View.GONE);
+                mSignaturePad_Begeher.setEnabled(false);
+
             } else {
                 Toast.makeText(formularActivity, "Unterschrift konnte nicht verarbeitet werden!", Toast.LENGTH_SHORT).show();
             }
@@ -100,6 +104,7 @@ public class SignatureHandler {
             signatureBitmapKunde = mSignaturePad_Kunde.getSignatureBitmap();
             if (signatureBitmapKunde != null) {
                 mSaveButton_Kunde.setVisibility(View.GONE);
+                mSignaturePad_Kunde.setEnabled(false);
             } else {
                 Toast.makeText(formularActivity, "Unterschrift konnte nicht verarbeitet werden!", Toast.LENGTH_SHORT).show();
             }

@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Picture;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
@@ -90,7 +93,7 @@ public class PDFGenerator {
         File file;
         Canvas canvas = page1.getCanvas();
         try {
-            if (!createHeader(canvas)) return null;
+           if (!createHeader(canvas)) return null;
             if (!createFirst(canvas)) return null;
             if (!createSecond(canvas)) return null;
             if (!createThird(canvas)) return null;
@@ -356,16 +359,24 @@ public class PDFGenerator {
             Toast.makeText(formularActivity, "Unterschrift Begeher fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        Bitmap resized1 = Bitmap.createScaledBitmap(signatureHandler.signatureBitmapBegeher, (int) (signatureHandler.signatureBitmapBegeher.getWidth() * 0.125), (int) (signatureHandler.signatureBitmapBegeher.getHeight() * 0.125), true);
-        canvas.drawBitmap(resized1, abstandRand + 7, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+        Picture picture = new Picture();
+        Canvas canvas2 = picture.beginRecording(signatureHandler.signatureBitmapBegeher.getWidth(), signatureHandler.signatureBitmapBegeher.getHeight());
+        canvas2.drawBitmap(signatureHandler.signatureBitmapBegeher, null, new RectF(0f, 0f, (float) signatureHandler.signatureBitmapBegeher.getWidth(), (float) signatureHandler.signatureBitmapBegeher.getHeight()), null);
+        picture.endRecording();
+        canvas.drawPicture(picture, new Rect((int) abstandRand + 5, (int) (positionY += 15), (int) (int) (pageWidth / 2) - 10, (int) positionY + 75));
+
 
         if (signatureHandler.signatureBitmapKunde == null) {
             Toast.makeText(formularActivity, "Unterschrift Begeher fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        Bitmap resized2 = Bitmap.createScaledBitmap(signatureHandler.signatureBitmapKunde, (int) (signatureHandler.signatureBitmapKunde.getWidth() * 0.125), (int) (signatureHandler.signatureBitmapKunde.getHeight() * 0.125), true);
-        canvas.drawBitmap(resized2, (pageWidth / 2) + 7, positionY, normalPaint(Paint.Align.LEFT));
 
+        picture = new Picture();
+        canvas2 = picture.beginRecording(signatureHandler.signatureBitmapKunde.getWidth(), signatureHandler.signatureBitmapKunde.getHeight());
+        canvas2.drawBitmap(signatureHandler.signatureBitmapKunde, null, new RectF(0f, 0f, (float) signatureHandler.signatureBitmapKunde.getWidth(), (float) signatureHandler.signatureBitmapKunde.getHeight()), null);
+        picture.endRecording();
+
+        canvas.drawPicture(picture, new Rect((int) (pageWidth / 2) + 5, (int) positionY, (int) (pageWidth -abstandRand) - 10, (int) positionY + 75));
 
         canvas.drawText(headerHandler.getPerson(), abstandRand + betweenLines, positionY += betweenLines + 75, normalPaint(Paint.Align.LEFT));
         canvas.drawText(customerHandler.getOwner(), (pageWidth / 2) + betweenLines, positionY, normalPaint(Paint.Align.LEFT));
