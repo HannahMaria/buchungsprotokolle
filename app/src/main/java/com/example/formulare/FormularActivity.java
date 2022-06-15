@@ -36,6 +36,11 @@ import java.util.Date;
 import java.util.List;
 
 public class FormularActivity extends AppCompatActivity {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.clear();
+    }
     private ActivityFormularBinding binding;
 
     private static final int PERMISSION_REQUEST_CODE = 200;
