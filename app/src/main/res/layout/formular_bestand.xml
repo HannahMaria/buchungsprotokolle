@@ -73,38 +73,72 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="Welche bekannten Leitungswege?"
-                        android:inputType="textPersonName" />
+                        android:hint="@string/welche_leitungswege_hindernisse"
+                        android:inputType="textPersonName"
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
+
+
+                    <LinearLayout
+                        android:id="@+id/inLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/inText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/einf_hrungen"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <RadioGroup
+                            android:id="@+id/inRadios"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RadioButton
+                                android:id="@+id/yesInRadio"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/ja" />
+
+                            <RadioButton
+                                android:id="@+id/noInRadio"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nein"
+                                tools:ignore="TouchTargetSizeCheck" />
+                        </RadioGroup>
+                    </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/inLayout"
+                    android:id="@+id/inLayoutComplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <TextView
-                        android:id="@+id/inText"
+                        android:id="@+id/inTextComplete"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/einf_hrungen"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="@string/sind_diese_vollst_ndig"
+                        android:textSize="16sp" />
 
                     <RadioGroup
-                        android:id="@+id/inRadios"
+                        android:id="@+id/inRadiosComplete"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <RadioButton
-                            android:id="@+id/yesInRadio"
+                            android:id="@+id/yesInRadioComplete"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/ja" />
 
                         <RadioButton
-                            android:id="@+id/noInRadio"
+                            android:id="@+id/noInRadioComplete"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/nein"

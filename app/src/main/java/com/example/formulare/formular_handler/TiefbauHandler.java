@@ -34,9 +34,9 @@ public class TiefbauHandler {
         tiefbauLayout = formularTiefbauBinding.groundLayout;
 
         tiefbauLayout.setVisibility(View.GONE);
-        asphaltOberLength.setVisibility(View.GONE);
-        withoutOberLength.setVisibility(View.GONE);
-        pflasterOberLength.setVisibility(View.GONE);
+        formularTiefbauBinding.withoutLayout2.setVisibility(View.GONE);
+        formularTiefbauBinding.pflasterLayout1.setVisibility(View.GONE);
+        formularTiefbauBinding.asphaltLayout2.setVisibility(View.GONE);
 
         necessary.setOnClickListener(v -> {
             if (necessary.isChecked()) {
@@ -55,23 +55,23 @@ public class TiefbauHandler {
 
         asphaltOber.setOnClickListener(v -> {
             if (asphaltOber.isChecked()) {
-                asphaltOberLength.setVisibility(View.VISIBLE);
+                formularTiefbauBinding.asphaltLayout2.setVisibility(View.VISIBLE);
             } else {
-                asphaltOberLength.setVisibility(View.GONE);
+                formularTiefbauBinding.asphaltLayout2.setVisibility(View.GONE);
             }
         });
         pflasterOber.setOnClickListener(v -> {
             if (pflasterOber.isChecked()) {
-                pflasterOberLength.setVisibility(View.VISIBLE);
+                formularTiefbauBinding.pflasterLayout1.setVisibility(View.VISIBLE);
             } else {
-                pflasterOberLength.setVisibility(View.GONE);
+                formularTiefbauBinding.pflasterLayout1.setVisibility(View.GONE);
             }
         });
         withoutOber.setOnClickListener(v -> {
             if (withoutOber.isChecked()) {
-                withoutOberLength.setVisibility(View.VISIBLE);
+                formularTiefbauBinding.withoutLayout2.setVisibility(View.VISIBLE);
             } else {
-                withoutOberLength.setVisibility(View.GONE);
+                formularTiefbauBinding.withoutLayout2.setVisibility(View.GONE);
             }
         });
     }

@@ -122,9 +122,8 @@
                 android:ems="10"
                 android:hint="@string/datum"
                 android:importantForAutofill="no"
-                android:inputType="date" />
+                android:inputType="textPostalAddress" />
+
         </LinearLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

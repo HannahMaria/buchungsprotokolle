@@ -37,7 +37,7 @@
 
 
     <string name="bestand">5. Bestand</string>
-    <string name="leitungen">Bekannte Leitungswege, welche den geplanten Trassenverlauf stören?</string>
+    <string name="leitungen">Bekannte Leitungswege und / oder andere Hindernisse, welche den geplanten Trassenverlauf stören?</string>
     <string name="leitungen_wenn">Wenn Ja, welche?</string>
     <string name="einf_hrungen">Nutzbare Einführungen</string>
     <string name="sonstige">Sonstige Absprachen</string>
@@ -49,6 +49,15 @@
 
     <string name="speichern">Speichern</string>
     <string name="l_schen">Löschen</string>
+    <string name="welche_leitungswege_hindernisse">Welche Leitungswege / Hindernisse?</string>
+    <string name="sind_diese_vollst_ndig">Sind diese vollständig?</string>
+    <string name="oberfl_chenart">Oberflächenart</string>
+    <string name="ohne_oberfl_che">Ohne Oberfläche</string>
+    <string name="m">m</string>
+    <string name="pflaster">Pflaster</string>
+    <string name="aspahlt">Aspahlt</string>
+    <string name="pdf_generieren">PDF Generieren</string>
+    <string name="generieren_und_senden">Generieren und Senden</string>
 
 
 </resources>

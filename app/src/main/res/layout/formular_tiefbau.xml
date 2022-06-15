@@ -79,7 +79,7 @@
                         android:id="@+id/groundText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Oberflächenart"
+                        android:text="@string/oberfl_chenart"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -87,11 +87,12 @@
                         android:id="@+id/groundLayout2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="3"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/withoutLayout"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -100,21 +101,40 @@
                                 android:id="@+id/without"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ohne Oberfläche" />
+                                android:text="@string/ohne_oberfl_che" />
 
-                            <EditText
-                                android:id="@+id/lengthWithoutInput"
-                                android:layout_width="match_parent"
+                            <LinearLayout
+                                android:id="@+id/withoutLayout2"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:ems="10"
-                                android:hint="@string/l_nge"
-                                android:inputType="textPersonName" />
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
+                                <EditText
+                                    android:id="@+id/lengthWithoutInput"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:ems="8"
+                                    android:hint="@string/l_nge"
+                                    android:inputType="numberDecimal"
+                                    android:autofillHints="" />
+
+                                <TextView
+                                    android:id="@+id/m1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:text="@string/m"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/pflasterLayout"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -123,20 +143,41 @@
                                 android:id="@+id/pflaster"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Plaster" />
+                                android:text="@string/pflaster" />
 
-                            <EditText
-                                android:id="@+id/lengthPlasterInput"
-                                android:layout_width="match_parent"
+
+                            <LinearLayout
+                                android:id="@+id/pflasterLayout1"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:ems="10"
-                                android:hint="@string/l_nge"
-                                android:inputType="textPersonName" />
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/lengthPlasterInput"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ems="8"
+                                    android:layout_weight="1"
+                                    android:hint="@string/l_nge"
+                                    android:inputType="numberDecimal"
+                                    android:importantForAutofill="no" />
+
+                                <TextView
+                                    android:id="@+id/m2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:text="@string/m"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/asphaltLayout"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -145,16 +186,36 @@
                                 android:id="@+id/asphalt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Aspahlt" />
+                                android:text="@string/aspahlt" />
 
-                            <EditText
-                                android:id="@+id/lengthAsphaltInput"
-                                android:layout_width="match_parent"
+                            <LinearLayout
+                                android:id="@+id/asphaltLayout2"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:ems="10"
-                                android:hint="@string/l_nge"
-                                android:inputType="textPersonName" />
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
 
+
+                                <EditText
+                                    android:id="@+id/lengthAsphaltInput"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="8"
+                                    android:hint="@string/l_nge"
+                                    android:layout_weight="2"
+                                    android:inputType="numberDecimal"
+                                    android:importantForAutofill="no" />
+
+                                <TextView
+                                    android:id="@+id/m3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/m"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

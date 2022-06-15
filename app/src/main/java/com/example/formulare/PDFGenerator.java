@@ -10,6 +10,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.widget.Toast;
 
 import com.example.formulare.formular_handler.BestandHandler;
@@ -270,7 +273,7 @@ public class PDFGenerator {
                 } else {
                     if (tiefbauHandler.getWithoutOber()) {
                         if (!tiefbauHandler.getWithoutOberLength().isEmpty()) {
-                            canvas.drawText("Ohne Oberfläche:" + "\t\t" + tiefbauHandler.getWithoutOberLength(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                            canvas.drawText("Ohne Oberfläche:" + "\t\t" + tiefbauHandler.getWithoutOberLength()+" m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
                         } else {
                             Toast.makeText(formularActivity, "Tiefbau Länge ohne Oberfläche fehlt!", Toast.LENGTH_SHORT).show();
                             return false;
@@ -278,7 +281,7 @@ public class PDFGenerator {
                     }
                     if (tiefbauHandler.getPflasterOber()) {
                         if (!tiefbauHandler.getPflasterOberLength().isEmpty()) {
-                            canvas.drawText("Plaster:" + "\t\t" + tiefbauHandler.getPflasterOberLength(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                            canvas.drawText("Plaster:" + "\t\t" + tiefbauHandler.getPflasterOberLength()+" m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
                         } else {
                             Toast.makeText(formularActivity, "Tiefbau Länge von Pflaster fehlt!", Toast.LENGTH_SHORT).show();
                             return false;
@@ -286,7 +289,7 @@ public class PDFGenerator {
                     }
                     if (tiefbauHandler.getAsphaltOber()) {
                         if (!tiefbauHandler.getAsphaltOberLength().isEmpty()) {
-                            canvas.drawText("Asphalt:" + "\t\t" + tiefbauHandler.getAsphaltOberLength(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                            canvas.drawText("Asphalt:" + "\t\t" + tiefbauHandler.getAsphaltOberLength()+" m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
                         } else {
                             Toast.makeText(formularActivity, "Tiefbau Länge von Asphalt fehlt!", Toast.LENGTH_SHORT).show();
                             return false;
@@ -318,7 +321,8 @@ public class PDFGenerator {
                     Toast.makeText(formularActivity, "Leitungswege Information fehlt!", Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                canvas.drawText("Störende Leitungswege: " + "\t\t" + bestandHandler.getCableInput(), pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                canvas.drawText("Störende Leitungswege: " , pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+                canvas.drawText(bestandHandler.getCableInput(), pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
             }
         }
         //Nutzbare Einführungen
@@ -328,8 +332,13 @@ public class PDFGenerator {
         } else {
             if (bestandHandler.noIn())
                 canvas.drawText("Keine nutzbaren Einführungen vorhanden!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
-            else
-                canvas.drawText("Nutzbaren Einführungen vorhanden!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            else {
+                if (!bestandHandler.getNoInComplete() && !bestandHandler.getYesInComplete()) {
+                    Toast.makeText(formularActivity, "Nutzbare Einführungen vollständig Information fehlt!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                canvas.drawText(bestandHandler.getNoInComplete() ? "Unvollständige " : "Vollständige " + "nutzbaren Einführungen vorhanden!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            }
 
         }
         drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
@@ -340,9 +349,18 @@ public class PDFGenerator {
         //Sonstige Angaben
         if (!formularActivity.sonstiges.getText().toString().isEmpty()) {
             float startY = positionY;
+
+            TextPaint mTextPaint = new TextPaint();
+            StaticLayout mTextLayout = new StaticLayout(formularActivity.sonstiges.getText().toString(), mTextPaint, (int) (pageWidth - (2 * abstandRand) - 30), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            canvas.save();
+
+
             canvas.drawText("Sonstige Angaben", abstandRand + 2, positionY += overTitle, titlePaint(Paint.Align.LEFT));
-            canvas.drawText(formularActivity.sonstiges.getText().toString(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
-            drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
+
+            canvas.translate(abstandRand + betweenLines, positionY += betweenLines);
+            mTextLayout.draw(canvas);
+            canvas.restore();
+            drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += mTextLayout.getHeight() + betweenLines);
         }
         return true;
     }
@@ -376,7 +394,7 @@ public class PDFGenerator {
         canvas2.drawBitmap(signatureHandler.signatureBitmapKunde, null, new RectF(0f, 0f, (float) signatureHandler.signatureBitmapKunde.getWidth(), (float) signatureHandler.signatureBitmapKunde.getHeight()), null);
         picture.endRecording();
 
-        canvas.drawPicture(picture, new Rect((int) (pageWidth / 2) + 5, (int) positionY, (int) (pageWidth -abstandRand) - 10, (int) positionY + 75));
+        canvas.drawPicture(picture, new Rect((int) (pageWidth / 2) + 5, (int) positionY, (int) (pageWidth - abstandRand) - 10, (int) positionY + 75));
 
         canvas.drawText(headerHandler.getPerson(), abstandRand + betweenLines, positionY += betweenLines + 75, normalPaint(Paint.Align.LEFT));
         canvas.drawText(customerHandler.getOwner(), (pageWidth / 2) + betweenLines, positionY, normalPaint(Paint.Align.LEFT));

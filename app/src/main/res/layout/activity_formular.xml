@@ -143,7 +143,7 @@
                 android:id="@+id/button_generate_pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PDF Generieren"
+                android:text="@string/pdf_generieren"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/formular_signature_inc" />
 
@@ -151,7 +151,7 @@
                 android:id="@+id/button_send_pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="E-Mail Senden"
+                android:text="@string/generieren_und_senden"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button_generate_pdf" />
 

@@ -83,7 +83,7 @@ public class FormularActivity extends AppCompatActivity {
             File file = pdfGenerator.generatePDF();
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL, new String[]{customerHandler.getEmail()});
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{customerHandler.getEmail(),"kusel-seith@seith-energietechnik.de"});
             i.putExtra(Intent.EXTRA_SUBJECT, "Begehungsprotokoll - Adresse:" + headerHandler.getAdress());
             i.putExtra(Intent.EXTRA_TEXT, "Unsere Aktenzeichen: \n\n Projektnummer: " + headerHandler.getProject() +
                     "\n Auftragsnr: " + headerHandler.getOrder() + "\n\n es betreute Sie " + headerHandler.getPerson() + "\n\n E-Mail Eigentümer: " + customerHandler.getEmail());

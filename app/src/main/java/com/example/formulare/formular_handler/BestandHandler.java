@@ -2,6 +2,7 @@ package com.example.formulare.formular_handler;
 
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
@@ -12,8 +13,11 @@ public class BestandHandler {
     private final RadioButton yesCable;
     private final RadioButton noCable;
     private final RadioButton yesIn;
+    private final RadioButton yesInComplete;
     private final RadioButton noIn;
+    private final RadioButton noInComplete;
     private final EditText cableInput;
+    private final LinearLayout inLayoutComplete;
 
 
     public BestandHandler(@NonNull FormularBestandBinding formularBestandBinding) {
@@ -21,7 +25,11 @@ public class BestandHandler {
         noCable = formularBestandBinding.noCableRadio;
         yesIn = formularBestandBinding.yesInRadio;
         noIn = formularBestandBinding.noInRadio;
+        yesInComplete = formularBestandBinding.yesInRadioComplete;
+        noInComplete = formularBestandBinding.noInRadioComplete;
         cableInput = formularBestandBinding.cableInput;
+        inLayoutComplete = formularBestandBinding.inLayoutComplete;
+        inLayoutComplete.setVisibility(View.GONE);
         setVisible(View.GONE);
         yesCable.setOnClickListener(v -> {
             if (yesCable.isChecked()) {
@@ -35,6 +43,20 @@ public class BestandHandler {
                 setVisible(View.VISIBLE);
             } else {
                 setVisible(View.GONE);
+            }
+        });
+        yesIn.setOnClickListener(v -> {
+            if (yesIn.isChecked()) {
+                inLayoutComplete.setVisibility(View.VISIBLE);
+            } else {
+                inLayoutComplete.setVisibility(View.GONE);
+            }
+        });
+        noIn.setOnClickListener(v -> {
+            if (yesIn.isChecked()) {
+                inLayoutComplete.setVisibility(View.VISIBLE);
+            } else {
+                inLayoutComplete.setVisibility(View.GONE);
             }
         });
     }
@@ -63,4 +85,11 @@ public class BestandHandler {
         return cableInput.getText().toString();
     }
 
+    public boolean getYesInComplete() {
+        return yesInComplete.isChecked();
+    }
+
+    public boolean getNoInComplete() {
+        return noInComplete.isChecked();
+    }
 }
