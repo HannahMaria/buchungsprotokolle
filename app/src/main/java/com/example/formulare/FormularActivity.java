@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,7 @@ public class FormularActivity extends AppCompatActivity {
     private PDFGenerator pdfGenerator;
     private CustomerHandler customerHandler;
     private TiefbauHandler tiefbauHandler;
+    public EditText sonstiges;
 
 
     @Override
@@ -66,6 +68,7 @@ public class FormularActivity extends AppCompatActivity {
         customerHandler = new CustomerHandler(binding.formularCustomerInc);
         tiefbauHandler = new TiefbauHandler(binding.formularTiefbauInc);
         pdfGenerator = new PDFGenerator(this, signatureHandler, headerHandler, bestandHandler, kindHandler, customerHandler, tiefbauHandler);
+        sonstiges = binding.editTextTextMultiLine;
     }
 
 

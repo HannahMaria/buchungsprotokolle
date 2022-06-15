@@ -1,5 +1,7 @@
 package com.example.formulare;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -21,8 +23,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PDFGenerator {
-    int pageWidth = 2480;
-    int pageHeight = 3508;
+    double faktor = 2.835;
+    int pageWidth = (int) (210 * faktor);
+    int pageHeight = (int) (297 * faktor);
+    int betweenLines = 15;
+    int overTitle = 30;
+    float positionY = (float) (faktor * 19.5);
+    float abstandRand = (float) (18 * faktor);
+
     FormularActivity formularActivity;
     SignatureHandler signatureHandler;
     HeaderHandler headerHandler;
@@ -42,67 +50,51 @@ public class PDFGenerator {
         this.tiefbauHandler = tiefbauHandler;
     }
 
-    public void generatePDF() {
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyy");
-        //Das bekomme ich hin denke ich, aber wenn du zeit und lust hast kannst du damit auch schonmal weitermachen
-        PdfDocument pdf = new PdfDocument();
+    private Paint normalPaint(Paint.Align align) {
         Paint paint = new Paint();
+        paint.setTextSize(10);
+        paint.setTextAlign(align);
+        paint.setTypeface(Typeface.create("Arial", Typeface.NORMAL));
+
+        return paint;
+
+    }
+
+    private Paint titlePaint(Paint.Align align) {
+        Paint paint = new Paint();
+        paint.setTextSize(12);
+        paint.setTextAlign(align);
+        paint.setTypeface(Typeface.create("Arial", Typeface.BOLD));
+
+        return paint;
+
+    }
+
+    private void drawRect(Canvas canvas, float left, float top, float right, float bottom) {
         Paint strokePaint = new Paint();
-        Paint titlePaint = new Paint();
+        strokePaint.setStyle(Paint.Style.STROKE);
+        strokePaint.setStrokeWidth(1);
+        canvas.drawRect(left, top, right, bottom, strokePaint);
+
+    }
+
+    public void generatePDF() {
+        positionY = (float) (faktor * 19.5);
+
+        PdfDocument pdf = new PdfDocument();
+
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
         PdfDocument.Page page1 = pdf.startPage(pageInfo);
 
         Canvas canvas = page1.getCanvas();
         try {
-            titlePaint.setTextAlign(Paint.Align.CENTER);
-            titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-            titlePaint.setTextSize(120);
-            canvas.drawText("Begehungsprotokoll", pageWidth / 2, 160, titlePaint);
-
-            //DATum
-            titlePaint.setTextSize(70);
-            titlePaint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(dateFormat.format(new Date()), pageWidth - 40, 160, titlePaint);
-
-            //1. Abschnitt
-            if (!createFirst(canvas, paint, strokePaint)) return;
-
-            //2. Abschnitt
-            if (!createSecond(canvas, paint, strokePaint)) return;
-
-            //3. Abschnitt
-            if (!createThird(canvas, paint, strokePaint)) return;
-            //3. Abschnitt
-            if (!createFourth(canvas, paint, strokePaint)) return;
-
-            //Unterschriften
-            paint.setTextSize(80);
-            paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("Begeher", 40, pageHeight - 700, paint);
-            canvas.drawText("Kunde", (pageWidth / 2) + 20, pageHeight - 700, paint);
-
-            strokePaint.setStyle(Paint.Style.STROKE);
-            strokePaint.setStrokeWidth(2);
-            canvas.drawRect(40, pageHeight - 680, (pageWidth / 2) - 20, pageHeight - 80, strokePaint);
-            canvas.drawRect((pageWidth / 2) + 20, pageHeight - 680, pageWidth - 40, pageHeight - 80, strokePaint);
-
-            paint.setTextSize(70);
-            paint.setTextAlign(Paint.Align.CENTER);
-
-            if (signatureHandler.signatureBitmapBegeher == null) {
-                Toast.makeText(formularActivity, "Unterschrift Begeher fehlt!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            canvas.drawBitmap(signatureHandler.signatureBitmapBegeher, 50, pageHeight - 600, paint);
-            canvas.drawText(headerHandler.getPerson(), 240, pageHeight - 100, paint);
-
-            if (signatureHandler.signatureBitmapKunde == null) {
-                Toast.makeText(formularActivity, "Unterschrift Begeher fehlt!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            canvas.drawBitmap(signatureHandler.signatureBitmapKunde, (pageWidth / 2) + 40, pageHeight - 600, paint);
-            canvas.drawText(customerHandler.getOwner(), (pageWidth / 2) + 160, pageHeight - 100, paint);
+            if (!createHeader(canvas)) return;
+            if (!createFirst(canvas)) return;
+            if (!createSecond(canvas)) return;
+            if (!createThird(canvas)) return;
+            if (!createFourth(canvas)) return;
+            if (!createSonstiges(canvas)) return;
+            if (!createSignatures(canvas)) return;
 
             pdf.finishPage(page1);
 
@@ -119,175 +111,253 @@ public class PDFGenerator {
         pdf.close();
     }
 
-    private boolean createFirst(Canvas canvas, Paint paint, Paint strokePaint) {
-        //1. Abschnitt
-        paint.setTextSize(90);
-        paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("1.Allgemeine Informationen", 40, 400, paint);
+    private boolean createHeader(Canvas canvas) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyy");
+        float startY = positionY;
 
-        strokePaint.setStyle(Paint.Style.STROKE);
-        strokePaint.setStrokeWidth(2);
-        canvas.drawRect(40, 420, pageWidth - 40, 840, strokePaint);
+        //Title
+        Paint paint = new Paint();
+        paint.setTextSize(14);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTypeface(Typeface.create("Arial", Typeface.BOLD));
 
-        paint.setTextSize(70);
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.setStyle(Paint.Style.FILL);
+        canvas.drawText("Firma", abstandRand + 2, positionY += betweenLines, titlePaint(Paint.Align.LEFT));
+        canvas.drawText(dateFormat.format(new Date()), pageWidth - abstandRand - 2, positionY, titlePaint(Paint.Align.RIGHT));
 
+
+        canvas.drawText("Seith Energietechnik GmbH & Co KG", abstandRand + betweenLines, positionY + betweenLines, normalPaint(Paint.Align.LEFT));
+        canvas.drawText("Bächlestr. 18", abstandRand + betweenLines, positionY + 40, normalPaint(Paint.Align.LEFT));
+        canvas.drawText("76706 Dettenheim", abstandRand + betweenLines, positionY + 55, normalPaint(Paint.Align.LEFT));
+
+        //Projekt
         if (headerHandler.getProject().isEmpty()) {
             Toast.makeText(formularActivity, "Projekt fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        canvas.drawText("Projekt:", 80, 500, paint);
-        canvas.drawText(headerHandler.getProject(), pageWidth / 2, 500, paint);
+        canvas.drawText("Projekt:" + "\t\t" + headerHandler.getProject(), (pageWidth / 2) + betweenLines, positionY += 25, normalPaint(Paint.Align.LEFT));
 
+        //Auftrag
         if (headerHandler.getOrder().isEmpty()) {
             Toast.makeText(formularActivity, "Auftrag fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        canvas.drawText("Auftrag:", 80, 580, paint);
-        canvas.drawText(headerHandler.getOrder(), pageWidth / 2, 580, paint);
+        canvas.drawText("Auftrag:" + "\t\t" + headerHandler.getOrder(), (pageWidth / 2) + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
 
-        if (customerHandler.getOwner().isEmpty()) {
-            Toast.makeText(formularActivity, "Eigentümer fehlt!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        canvas.drawText("Eigentümer:", 80, 660, paint);
-        canvas.drawText(customerHandler.getOwner(), pageWidth / 2, 660, paint);
-
-        if (customerHandler.getOwner().isEmpty()) {
-            Toast.makeText(formularActivity, "E-Mail fehlt!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        //TODO:NächsteZeile
-        canvas.drawText("Eigentümer E-Mail:", 80, 660, paint);
-        canvas.drawText(customerHandler.getEmail(), pageWidth / 2, 660, paint);
-
-        if (headerHandler.getPerson().isEmpty()) {
-            Toast.makeText(formularActivity, "Begeher fehlt!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        canvas.drawText("Begeher:", 80, 740, paint);
-        canvas.drawText(headerHandler.getPerson(), pageWidth / 2, 740, paint);
-
+        //Auftrag
         if (headerHandler.getAdress().isEmpty()) {
             Toast.makeText(formularActivity, "Adresse fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        canvas.drawText("Adresse:", 80, 820, paint);
-        canvas.drawText(headerHandler.getAdress(), pageWidth / 2, 820, paint);
-        return true;
-    }
+        canvas.drawText("Adresse:" + "\t\t" + headerHandler.getAdress(), (pageWidth / 2) + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
 
-    private boolean createSecond(Canvas canvas, Paint paint, Paint strokePaint) {
-        //2. Abschnitt
-        paint.setTextSize(90);
-        paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("2.Räumlichkeiten", 40, 1000, paint);
+        drawRect(canvas, abstandRand, startY, pageWidth / 2, positionY += betweenLines);
+        drawRect(canvas, pageWidth / 2, startY, pageWidth - abstandRand, positionY);
 
-        strokePaint.setStyle(Paint.Style.STROKE);
-        strokePaint.setStrokeWidth(2);
-        canvas.drawRect(40, 1020, pageWidth - 40, 1120, strokePaint);
-
-        paint.setTextSize(70);
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.setStyle(Paint.Style.FILL);
-
-        canvas.drawText("Art:", 80, 1100, paint);
-        String text = kindHandler.privateManner() ? "Privat" : "Gewerblich";
-        canvas.drawText(text, pageWidth / 3, 1100, paint);
-
-        if (!kindHandler.privateManner() && !kindHandler.companyManner()) {
-            Toast.makeText(formularActivity, "Art fehlt!", Toast.LENGTH_SHORT).show();
+        //2.Quadrat
+        startY = positionY;
+        canvas.drawText("Begehungsprotokoll", pageWidth / 2, positionY += 20, paint);
+        canvas.drawText("von", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+        //Begeher
+        if (headerHandler.getPerson().isEmpty()) {
+            Toast.makeText(formularActivity, "Begeher fehlt!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (kindHandler.privateManner()) {
-            if (!kindHandler.moreFamilyHouse() && !kindHandler.onFamilyHouse()) {
-                Toast.makeText(formularActivity, "Haus Art fehlt!", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            canvas.drawText(kindHandler.moreFamilyHouse() ? "Mehrfamilienhaus" : "Einfamilienhaus", pageWidth / 3 * 2, 1100, paint);
-        }
+        canvas.drawText(headerHandler.getPerson(), (pageWidth / 2), positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+        drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
 
         return true;
     }
 
-    private boolean createThird(Canvas canvas, Paint paint, Paint strokePaint) {
-        //3. Abschnitt
-        paint.setTextSize(90);
-        paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("3.Tiefbau", 40, 1280, paint);
+    private boolean createFirst(Canvas canvas) {
+        //1. Abschnitt
+        float startY = positionY;
 
-        strokePaint.setStyle(Paint.Style.STROKE);
-        strokePaint.setStrokeWidth(2);
-        canvas.drawRect(40, 1300, pageWidth - 40, 1560, strokePaint);
+        canvas.drawText("1. Kundeninformationen", abstandRand + 2, positionY += overTitle, titlePaint(Paint.Align.LEFT));
 
-        paint.setTextSize(70);
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.setStyle(Paint.Style.FILL);
+        //Eigentümer
+        if (customerHandler.getOwner().isEmpty()) {
+            Toast.makeText(formularActivity, "Eigentümer fehlt!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        canvas.drawText("Eigentümer:" + "\t\t" + customerHandler.getOwner(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+        //E-Mail
+        if (customerHandler.getEmail().isEmpty()) {
+            Toast.makeText(formularActivity, "E-Mail fehlt!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        canvas.drawText("E-Mail:" + "\t\t" + customerHandler.getEmail(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
 
-        canvas.drawText("Tiefbau notwendig?", 80, 1380, paint);
-        String text = tiefbauHandler.getNecessary() ? "Ja" : "Nein";
-        canvas.drawText(text, pageWidth / 3, 1380, paint);
+        //Datum
+        if (!customerHandler.getNoDate() && !customerHandler.getYesDate()) {
+            Toast.makeText(formularActivity, "Ausführungtermin Information fehlt!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            if (customerHandler.getNoDate())
+                canvas.drawText("Kein Ausführungstermin notwendig!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            else {
+                if (customerHandler.getDateInput().isEmpty()) {
+                    Toast.makeText(formularActivity, "Ausführungstermin fehlt!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                canvas.drawText("Ausführungstermin:" + "\t\t" + customerHandler.getDateInput(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+            }
+        }
+
+        drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
+        return true;
+    }
+
+    private boolean createSecond(Canvas canvas) {
+        //2. Abschnitt
+        float startY = positionY;
+
+        canvas.drawText("2. Räumlichkeiten", abstandRand + 2, positionY += overTitle, titlePaint(Paint.Align.LEFT));
+
+        //Räumlichkeiten
+        if (!kindHandler.privateManner() && !kindHandler.companyManner()) {
+            Toast.makeText(formularActivity, "Räumlichkeiten Information fehlt!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            if (kindHandler.companyManner())
+                canvas.drawText("Gewerbliches Gebäude", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            else {
+                if (!kindHandler.onFamilyHouse() && !kindHandler.moreFamilyHouse()) {
+                    Toast.makeText(formularActivity, "Haus-Art Information fehlt!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                canvas.drawText("Privates " + (kindHandler.moreFamilyHouse() ? " Mehrfamilien Haus" : " Einfamilien Haus"), pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            }
+        }
+
+        drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
+        return true;
+    }
+
+    private boolean createThird(Canvas canvas) {
+        //3. Tiefbau
+        float startY = positionY;
+
+        canvas.drawText("3. Tiefbau", abstandRand + 2, positionY += overTitle, titlePaint(Paint.Align.LEFT));
+
+        //Datum
         if (!tiefbauHandler.getNecessary() && !tiefbauHandler.getNotNecessary()) {
             Toast.makeText(formularActivity, "Tiefbau Information fehlt!", Toast.LENGTH_SHORT).show();
             return false;
+        } else {
+            if (tiefbauHandler.getNotNecessary())
+                canvas.drawText("Kein Tiefbau notwendig!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            else {
+                if (!tiefbauHandler.getWithoutOber() && !tiefbauHandler.getAsphaltOber() && !tiefbauHandler.getPflasterOber()) {
+                    Toast.makeText(formularActivity, "Tiefbau Information fehlt!", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    if (tiefbauHandler.getWithoutOber()) {
+                        if (!tiefbauHandler.getWithoutOberLength().isEmpty()) {
+                            canvas.drawText("Ohne Oberfläche:" + "\t\t" + tiefbauHandler.getWithoutOberLength(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                        } else {
+                            Toast.makeText(formularActivity, "Tiefbau Länge ohne Oberfläche fehlt!", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    }
+                    if (tiefbauHandler.getPflasterOber()) {
+                        if (!tiefbauHandler.getPflasterOberLength().isEmpty()) {
+                            canvas.drawText("Plaster:" + "\t\t" + tiefbauHandler.getPflasterOberLength(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                        } else {
+                            Toast.makeText(formularActivity, "Tiefbau Länge von Pflaster fehlt!", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    }
+                    if (tiefbauHandler.getAsphaltOber()) {
+                        if (!tiefbauHandler.getAsphaltOberLength().isEmpty()) {
+                            canvas.drawText("Asphalt:" + "\t\t" + tiefbauHandler.getAsphaltOberLength(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                        } else {
+                            Toast.makeText(formularActivity, "Tiefbau Länge von Asphalt fehlt!", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                    }
+                }
+            }
         }
-     /*   if (tiefbauHandler.getNecessary_RB()) {
-            if (tiefbauHandler.getLength_EDT().isEmpty()) {
-                Toast.makeText(formularActivity, "Länge fehlt!", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            canvas.drawText("Länge:", pageWidth / 2, 1420, paint);
-            canvas.drawText(tiefbauHandler.getLength_EDT(), pageWidth / 4 * 3, 1420, paint);
-            if (tiefbauHandler.getOverground_EDT().isEmpty()) {
-                Toast.makeText(formularActivity, "Oberflächenart fehlt!", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            canvas.drawText("Oberflächenart:", 80, 1460, paint);
-            canvas.drawText(tiefbauHandler.getOverground_EDT(), 80, 1540, paint);
-        }*/
+
+        drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
         return true;
     }
 
-    private boolean createFourth(Canvas canvas, Paint paint, Paint strokePaint) {
+    private boolean createFourth(Canvas canvas) {
         //4. Abschnitt
-        paint.setTextSize(90);
-        paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("4.Bestand", 40, 1720, paint);
+        float startY = positionY;
 
-        strokePaint.setStyle(Paint.Style.STROKE);
-        strokePaint.setStrokeWidth(2);
-        canvas.drawRect(40, 1740, pageWidth - 40, 1920, strokePaint);
+        canvas.drawText("4. Bestand", abstandRand + 2, positionY += overTitle, titlePaint(Paint.Align.LEFT));
 
-        paint.setTextSize(70);
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.setStyle(Paint.Style.FILL);
-        if (!bestandHandler.noCable() && !bestandHandler.yesCable()) {
+        //Leitungswege
+        if (!bestandHandler.yesCable() && !bestandHandler.noCable()) {
             Toast.makeText(formularActivity, "Leitungswege Information fehlt!", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        canvas.drawText("Bekannte Leitungswege, welche den geplanten Trassenverlauf stören:", 80, 1820, paint);
-        if (bestandHandler.yesCable()) {
-            if (!bestandHandler.getCableInput().isEmpty()) {
-                Toast.makeText(formularActivity, "Nutzbare Einführungen Information fehlt!", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-            //TODO: nächste Zeile
-            canvas.drawText("Ja - " + bestandHandler.getCableInput(), pageWidth / 3 * 2, 1820, paint);
-
         } else {
-            canvas.drawText("Nein", pageWidth / 3 * 2, 1820, paint);
+            if (bestandHandler.noCable())
+                canvas.drawText("Keine störenden Leitungswege bekannt!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            else {
+                if (bestandHandler.getCableInput().isEmpty()) {
+                    Toast.makeText(formularActivity, "Leitungswege Information fehlt!", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                canvas.drawText("Störende Leitungswege: " + "\t\t" + bestandHandler.getCableInput(), pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+            }
         }
-
-        if (!bestandHandler.yesIn() && !bestandHandler.noIn()) {
+        //Nutzbare Einführungen
+        if (!bestandHandler.noIn() && !bestandHandler.yesIn()) {
             Toast.makeText(formularActivity, "Nutzbare Einführungen Information fehlt!", Toast.LENGTH_SHORT).show();
             return false;
+        } else {
+            if (bestandHandler.noIn())
+                canvas.drawText("Keine nutzbaren Einführungen vorhanden!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+            else
+                canvas.drawText("Nutzbaren Einführungen vorhanden!", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+
         }
-        canvas.drawText("Nutzbare Einführungen:", 80, 1900, paint);
-        String text = bestandHandler.yesIn() ? "Ja" : "Nein";
-        canvas.drawText(text, pageWidth / 2, 1900, paint);
-
-
+        drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
         return true;
     }
+
+    private boolean createSonstiges(Canvas canvas) {
+        //Sonstige Angaben
+        if (!formularActivity.sonstiges.getText().toString().isEmpty()) {
+            float startY = positionY;
+            canvas.drawText("Sonstige Angaben", abstandRand + 2, positionY += overTitle, titlePaint(Paint.Align.LEFT));
+            canvas.drawText(formularActivity.sonstiges.getText().toString(), abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+            drawRect(canvas, abstandRand, startY, pageWidth - abstandRand, positionY += betweenLines);
+        }
+        return true;
+    }
+
+    private boolean createSignatures(Canvas canvas) {
+        //Unterschriften
+        float startY = positionY;
+
+        canvas.drawText("Begeher", abstandRand + betweenLines, positionY += overTitle, titlePaint(Paint.Align.LEFT));
+        canvas.drawText("Kunde", (pageWidth / 2) + betweenLines, positionY, titlePaint(Paint.Align.LEFT));
+
+
+        if (signatureHandler.signatureBitmapBegeher == null) {
+            Toast.makeText(formularActivity, "Unterschrift Begeher fehlt!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        Bitmap resized1 = Bitmap.createScaledBitmap(signatureHandler.signatureBitmapBegeher, (int) (signatureHandler.signatureBitmapBegeher.getWidth() * 0.125), (int) (signatureHandler.signatureBitmapBegeher.getHeight() * 0.125), true);
+        canvas.drawBitmap(resized1, abstandRand + 7, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+
+        if (signatureHandler.signatureBitmapKunde == null) {
+            Toast.makeText(formularActivity, "Unterschrift Begeher fehlt!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        Bitmap resized2 = Bitmap.createScaledBitmap(signatureHandler.signatureBitmapKunde, (int) (signatureHandler.signatureBitmapKunde.getWidth() * 0.125), (int) (signatureHandler.signatureBitmapKunde.getHeight() * 0.125), true);
+        canvas.drawBitmap(resized2, (pageWidth / 2) + 7, positionY, normalPaint(Paint.Align.LEFT));
+
+
+        canvas.drawText(headerHandler.getPerson(), abstandRand + betweenLines, positionY += betweenLines + 75, normalPaint(Paint.Align.LEFT));
+        canvas.drawText(customerHandler.getOwner(), (pageWidth / 2) + betweenLines, positionY, normalPaint(Paint.Align.LEFT));
+        drawRect(canvas, abstandRand, startY, pageWidth / 2, positionY += betweenLines);
+        drawRect(canvas, pageWidth / 2, startY, pageWidth - abstandRand, positionY);
+        return true;
+    }
+
 }
