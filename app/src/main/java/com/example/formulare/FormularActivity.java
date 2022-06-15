@@ -1,11 +1,14 @@
 package com.example.formulare;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.widget.EditText;
@@ -15,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.example.formulare.databinding.ActivityFormularBinding;
 import com.example.formulare.formular_handler.BestandHandler;
@@ -29,12 +33,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class FormularActivity extends AppCompatActivity {
     private ActivityFormularBinding binding;
 
     private static final int PERMISSION_REQUEST_CODE = 200;
-    private static final String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final String[] PERMISSIONS_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.MANAGE_EXTERNAL_STORAGE};
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private HeaderHandler headerHandler;
     private BestandHandler bestandHandler;
@@ -56,6 +61,7 @@ public class FormularActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         createPDFButton();
+        createSendButton();
         initHandler();
     }
 
@@ -71,6 +77,38 @@ public class FormularActivity extends AppCompatActivity {
         sonstiges = binding.editTextTextMultiLine;
     }
 
+
+    public void createSendButton() {
+        binding.buttonSendPdf.setOnClickListener(v -> {
+            File file = pdfGenerator.generatePDF();
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{customerHandler.getEmail()});
+            i.putExtra(Intent.EXTRA_SUBJECT, "Begehungsprotokoll - Adresse:" + headerHandler.getAdress());
+            i.putExtra(Intent.EXTRA_TEXT, "Unsere Aktenzeichen: \n\n Projektnummer: " + headerHandler.getProject() +
+                    "\n Auftragsnr: " + headerHandler.getOrder() + "\n\n es betreute Sie " + headerHandler.getPerson() + "\n\n E-Mail Eigentümer: " + customerHandler.getEmail());
+            try {
+                if (file != null && (!file.exists() || !file.canRead())) {
+                    Toast.makeText(FormularActivity.this, "Die PDF konnte nicht an die Email angehängt werden.", Toast.LENGTH_SHORT).show();
+                }
+
+
+                Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+                i.putExtra(Intent.EXTRA_STREAM, uri);
+
+                List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY);
+
+                for (ResolveInfo resolveInfo : resInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+                    this.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+
+                startActivity(Intent.createChooser(i, "Email senden..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(FormularActivity.this, "Es ist kein geeignetes E-Mail-Programm hinterlegt!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public void createPDFButton() {
         // below code is used for
@@ -88,7 +126,8 @@ public class FormularActivity extends AppCompatActivity {
         // checking of permissions.
         int permission1 = ContextCompat.checkSelfPermission(getApplicationContext(), PERMISSIONS_STORAGE[0]);
         int permission2 = ContextCompat.checkSelfPermission(getApplicationContext(), PERMISSIONS_STORAGE[1]);
-        return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED;
+        int permission3 = ContextCompat.checkSelfPermission(getApplicationContext(), PERMISSIONS_STORAGE[2]);
+        return permission1 == PackageManager.PERMISSION_GRANTED && permission2 == PackageManager.PERMISSION_GRANTED && permission3 == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {

@@ -19,6 +19,7 @@ import com.example.formulare.formular_handler.TiefbauHandler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,6 +39,7 @@ public class PDFGenerator {
     KindHandler kindHandler;
     CustomerHandler customerHandler;
     TiefbauHandler tiefbauHandler;
+    String filename;
 
     PDFGenerator(FormularActivity formularActivity, SignatureHandler signatureHandler, HeaderHandler headerHandler,
                  BestandHandler bestandHandler, KindHandler kindHandler, CustomerHandler customerHandler, TiefbauHandler tiefbauHandler) {
@@ -78,37 +80,49 @@ public class PDFGenerator {
 
     }
 
-    public void generatePDF() {
+    public File generatePDF() {
         positionY = (float) (faktor * 19.5);
 
         PdfDocument pdf = new PdfDocument();
 
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
         PdfDocument.Page page1 = pdf.startPage(pageInfo);
-
+        File file;
         Canvas canvas = page1.getCanvas();
         try {
-            if (!createHeader(canvas)) return;
-            if (!createFirst(canvas)) return;
-            if (!createSecond(canvas)) return;
-            if (!createThird(canvas)) return;
-            if (!createFourth(canvas)) return;
-            if (!createSonstiges(canvas)) return;
-            if (!createSignatures(canvas)) return;
+            if (!createHeader(canvas)) return null;
+            if (!createFirst(canvas)) return null;
+            if (!createSecond(canvas)) return null;
+            if (!createThird(canvas)) return null;
+            if (!createFourth(canvas)) return null;
+            if (!createSonstiges(canvas)) return null;
+            if (!createSignatures(canvas)) return null;
 
             pdf.finishPage(page1);
 
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/" + headerHandler.getProject() + "-" + headerHandler.getAdress() + System.currentTimeMillis() + ".pdf");
-
+            filename = "/" + headerHandler.getProject() + "-" + headerHandler.getAdress();
+            file = new File(formularActivity.getApplicationContext().getFilesDir(), filename + ".pdf");
+            File file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename + ".pdf");
+            int i = 0;
+            while (file1.exists()) {
+                if (i > 0)
+                    filename = filename.substring(0, filename.length() - String.valueOf(i).length());
+                i++;
+                filename = filename + i;
+                file = new File(formularActivity.getApplicationContext().getFilesDir(), filename + ".pdf");
+                file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename + ".pdf");
+            }
             pdf.writeTo(new FileOutputStream(file));
+            pdf.writeTo(new FileOutputStream(file1));
             Toast.makeText(formularActivity, "PDF erstellt - im Ordner Downloads!", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(formularActivity, "PDF konnte nicht erstellt werden!", Toast.LENGTH_SHORT).show();
-
+            return null;
         }
         pdf.close();
+        return file;
     }
 
     private boolean createHeader(Canvas canvas) {
