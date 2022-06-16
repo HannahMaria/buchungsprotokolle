@@ -9,15 +9,19 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.formulare.formular_handler.BestandHandler;
 import com.example.formulare.formular_handler.CustomerHandler;
 import com.example.formulare.formular_handler.HeaderHandler;
+import com.example.formulare.formular_handler.ImageHandler;
 import com.example.formulare.formular_handler.KindHandler;
 import com.example.formulare.formular_handler.SignatureHandler;
 import com.example.formulare.formular_handler.TiefbauHandler;
@@ -37,22 +41,25 @@ public class PDFGenerator {
     int overTitle = 30;
     float positionY = (float) (faktor * 19.5);
     float abstandRand = (float) (18 * faktor);
+    Canvas canvas;
 
     FormularActivity formularActivity;
     SignatureHandler signatureHandler;
     HeaderHandler headerHandler;
     BestandHandler bestandHandler;
+    ImageHandler imageHandler;
     KindHandler kindHandler;
     CustomerHandler customerHandler;
     TiefbauHandler tiefbauHandler;
     String filename;
 
     PDFGenerator(FormularActivity formularActivity, SignatureHandler signatureHandler, HeaderHandler headerHandler,
-                 BestandHandler bestandHandler, KindHandler kindHandler, CustomerHandler customerHandler, TiefbauHandler tiefbauHandler) {
+                 BestandHandler bestandHandler, KindHandler kindHandler, CustomerHandler customerHandler, TiefbauHandler tiefbauHandler, ImageHandler imageHandler) {
         this.formularActivity = formularActivity;
         this.signatureHandler = signatureHandler;
         this.headerHandler = headerHandler;
         this.bestandHandler = bestandHandler;
+        this.imageHandler = imageHandler;
         this.kindHandler = kindHandler;
         this.customerHandler = customerHandler;
         this.tiefbauHandler = tiefbauHandler;
@@ -89,23 +96,102 @@ public class PDFGenerator {
     public File generatePDF() {
         positionY = (float) (faktor * 19.5);
 
+        PdfDocument pdfCopy = new PdfDocument();
         PdfDocument pdf = new PdfDocument();
+        int pageNumber = 1;
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create();
+        PdfDocument.Page page = pdf.startPage(pageInfo);
+        PdfDocument.Page pageCopy = pdfCopy.startPage(pageInfo);
 
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
-        PdfDocument.Page page1 = pdf.startPage(pageInfo);
         File file;
-        Canvas canvas = page1.getCanvas();
+        Canvas canvas = page.getCanvas();
+        Canvas canvasCopy = pageCopy.getCanvas();
         try {
-           if (!createHeader(canvas)) return null;
-            if (!createFirst(canvas)) return null;
-            if (!createSecond(canvas)) return null;
-            if (!createThird(canvas)) return null;
-            if (!createFourth(canvas)) return null;
-            if (!createSonstiges(canvas)) return null;
-            if (!createSignatures(canvas)) return null;
+            float positionYCopy = positionY;
+            if (!createHeader(canvasCopy)) return null;
+            positionY = positionYCopy;
+            createHeader(canvas);
+            positionYCopy = positionY;
 
-            pdf.finishPage(page1);
+            if (!createFirst(canvasCopy)) return null;
+            positionY = positionYCopy;
+            createFirst(canvas);
+            positionYCopy = positionY;
 
+            if (!createSecond(canvasCopy)) return null;
+            positionY = positionYCopy;
+            createSecond(canvas);
+            positionYCopy = positionY;
+
+            if (!createThird(canvasCopy)) return null;
+            positionY = positionYCopy;
+            createThird(canvas);
+            positionYCopy = positionY;
+
+            if (!createFourth(canvasCopy)) return null;
+            positionY = positionYCopy;
+            createFourth(canvas);
+            positionYCopy = positionY;
+
+            if (!createSonstiges(canvasCopy)) return null;
+
+            //maybe second Page
+            if (positionY >= pageHeight - (faktor * 19.5 * 2)) {
+                pdf.finishPage(page);
+                pdfCopy.finishPage(pageCopy);
+                positionY = (float) (faktor * 19.5);
+                PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber++).create();
+
+                page = pdf.startPage(pageInfo2);
+                pageCopy = pdfCopy.startPage(pageInfo2);
+                canvas = page.getCanvas();
+                canvasCopy = pageCopy.getCanvas();
+            }else
+            positionY = positionYCopy;
+            createSonstiges(canvas);
+            positionYCopy = positionY;
+
+            if (!createSignatures(canvasCopy)) return null;
+
+            if (positionY >= pageHeight - (faktor * 19.5 * 2)) {
+                pdf.finishPage(page);
+                pdfCopy.finishPage(pageCopy);
+                positionY = (float) (faktor * 19.5);
+                PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber++).create();
+
+                page = pdf.startPage(pageInfo2);
+                pageCopy = pdfCopy.startPage(pageInfo2);
+                canvas = page.getCanvas();
+                canvasCopy = pageCopy.getCanvas();
+            }else
+            positionY = positionYCopy;
+            createSignatures(canvas);
+
+
+            //Bilder
+
+            for (Uri uri : imageHandler.mArrayUri) {
+                positionYCopy = positionY;
+
+                createPictures(canvasCopy, uri);
+
+                if (positionY >= pageHeight - (faktor * 19.5 * 2)) {
+                    pdf.finishPage(page);
+                    pdfCopy.finishPage(pageCopy);
+                    positionY = (float) (faktor * 19.5);
+                    PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber++).create();
+
+                    page = pdf.startPage(pageInfo2);
+                    pageCopy = pdfCopy.startPage(pageInfo2);
+                    canvas = page.getCanvas();
+                    canvasCopy = pageCopy.getCanvas();
+                }else{
+                    positionY = positionYCopy;
+                }
+                createPictures(canvas, uri);
+            }
+
+            pdf.finishPage(page);
             filename = "/" + headerHandler.getProject() + "-" + headerHandler.getAdress();
             file = new File(formularActivity.getApplicationContext().getFilesDir(), filename + ".pdf");
             File file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename + ".pdf");
@@ -273,7 +359,7 @@ public class PDFGenerator {
                 } else {
                     if (tiefbauHandler.getWithoutOber()) {
                         if (!tiefbauHandler.getWithoutOberLength().isEmpty()) {
-                            canvas.drawText("Ohne Oberfläche:" + "\t\t" + tiefbauHandler.getWithoutOberLength()+" m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                            canvas.drawText("Ohne Oberfläche:" + "\t\t" + tiefbauHandler.getWithoutOberLength() + " m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
                         } else {
                             Toast.makeText(formularActivity, "Tiefbau Länge ohne Oberfläche fehlt!", Toast.LENGTH_SHORT).show();
                             return false;
@@ -281,7 +367,7 @@ public class PDFGenerator {
                     }
                     if (tiefbauHandler.getPflasterOber()) {
                         if (!tiefbauHandler.getPflasterOberLength().isEmpty()) {
-                            canvas.drawText("Plaster:" + "\t\t" + tiefbauHandler.getPflasterOberLength()+" m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                            canvas.drawText("Plaster:" + "\t\t" + tiefbauHandler.getPflasterOberLength() + " m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
                         } else {
                             Toast.makeText(formularActivity, "Tiefbau Länge von Pflaster fehlt!", Toast.LENGTH_SHORT).show();
                             return false;
@@ -289,7 +375,7 @@ public class PDFGenerator {
                     }
                     if (tiefbauHandler.getAsphaltOber()) {
                         if (!tiefbauHandler.getAsphaltOberLength().isEmpty()) {
-                            canvas.drawText("Asphalt:" + "\t\t" + tiefbauHandler.getAsphaltOberLength()+" m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
+                            canvas.drawText("Asphalt:" + "\t\t" + tiefbauHandler.getAsphaltOberLength() + " m Länge", abstandRand + betweenLines, positionY += betweenLines, normalPaint(Paint.Align.LEFT));
                         } else {
                             Toast.makeText(formularActivity, "Tiefbau Länge von Asphalt fehlt!", Toast.LENGTH_SHORT).show();
                             return false;
@@ -321,7 +407,7 @@ public class PDFGenerator {
                     Toast.makeText(formularActivity, "Leitungswege Information fehlt!", Toast.LENGTH_SHORT).show();
                     return false;
                 }
-                canvas.drawText("Störende Leitungswege: " , pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
+                canvas.drawText("Störende Leitungswege: ", pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
                 canvas.drawText(bestandHandler.getCableInput(), pageWidth / 2, positionY += betweenLines, normalPaint(Paint.Align.CENTER));
             }
         }
@@ -401,6 +487,35 @@ public class PDFGenerator {
         drawRect(canvas, abstandRand, startY, pageWidth / 2, positionY += betweenLines);
         drawRect(canvas, pageWidth / 2, startY, pageWidth - abstandRand, positionY);
         return true;
+    }
+
+    private void createPictures(Canvas canvas, Uri uri) {
+        //Bilder
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(formularActivity.getContentResolver(), uri);
+            if (bitmap != null) {
+                Picture picture = new Picture();
+                Canvas canvas2 = picture.beginRecording(bitmap.getWidth(), bitmap.getHeight());
+                canvas2.drawBitmap(bitmap, null, new RectF(0f, 0f, (float) bitmap.getWidth(), (float) bitmap.getHeight()), null);
+                picture.endRecording();
+                int width = picture.getWidth();
+                int height = picture.getHeight();
+
+                if (width > (pageWidth - abstandRand - 5)) {
+                    double factor = (double) (pageWidth - abstandRand - 5) / width;
+                    width = (int) (width * factor);
+                    height = (int) (height * factor);
+                }
+                if (height > (pageHeight - ((faktor * 19.5 * 2)))) {
+                    double factor = (double) (pageHeight - ((faktor * 19.5 * 2))) / height;
+                    width = (int) (width * factor);
+                    height = (int) (height * factor);
+                }
+                canvas.drawPicture(picture, new Rect((int) abstandRand + 5, (int) (positionY += 15), (int) (abstandRand + 5 + width), (int) (positionY += height)));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

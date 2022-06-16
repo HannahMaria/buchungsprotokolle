@@ -80,13 +80,13 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/formular_tiefbau_inc" />
 
-            <!--   <include
+              <include
                    android:id="@+id/formular_images_inc"
                    layout="@layout/formular_images"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    app:layout_constraintTop_toBottomOf="@+id/formular_bestand_inc"
-                     />-->
+                     />
             <androidx.cardview.widget.CardView
                 android:id="@+id/card"
                 android:elevation="3dp"
@@ -95,7 +95,7 @@
                 app:cardCornerRadius="8dp"
                 app:cardUseCompatPadding="true"
                 app:contentPadding="4dp"
-                app:layout_constraintTop_toBottomOf="@+id/formular_bestand_inc" >
+                app:layout_constraintTop_toBottomOf="@+id/formular_images_inc" >
 
 
                 <LinearLayout

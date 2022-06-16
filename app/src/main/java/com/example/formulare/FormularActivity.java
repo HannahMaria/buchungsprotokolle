@@ -24,6 +24,7 @@ import com.example.formulare.databinding.ActivityFormularBinding;
 import com.example.formulare.formular_handler.BestandHandler;
 import com.example.formulare.formular_handler.CustomerHandler;
 import com.example.formulare.formular_handler.HeaderHandler;
+import com.example.formulare.formular_handler.ImageHandler;
 import com.example.formulare.formular_handler.KindHandler;
 import com.example.formulare.formular_handler.SignatureHandler;
 import com.example.formulare.formular_handler.TiefbauHandler;
@@ -48,7 +49,7 @@ public class FormularActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private HeaderHandler headerHandler;
     private BestandHandler bestandHandler;
-    //  private ImageHandler imageHandler;
+      private ImageHandler imageHandler;
     private KindHandler kindHandler;
     private SignatureHandler signatureHandler;
     private PDFGenerator pdfGenerator;
@@ -73,12 +74,12 @@ public class FormularActivity extends AppCompatActivity {
     private void initHandler() {
         headerHandler = new HeaderHandler(binding.formularHeaderInc);
         bestandHandler = new BestandHandler(binding.formularBestandInc);
-        // imageHandler = new ImageHandler(this, binding.formularImagesInc);
+        imageHandler = new ImageHandler(this, binding.formularImagesInc);
         kindHandler = new KindHandler(binding.formularKindInc);
         signatureHandler = new SignatureHandler(this, binding.formularSignatureInc);
         customerHandler = new CustomerHandler(binding.formularCustomerInc);
         tiefbauHandler = new TiefbauHandler(binding.formularTiefbauInc);
-        pdfGenerator = new PDFGenerator(this, signatureHandler, headerHandler, bestandHandler, kindHandler, customerHandler, tiefbauHandler);
+        pdfGenerator = new PDFGenerator(this, signatureHandler, headerHandler, bestandHandler, kindHandler, customerHandler, tiefbauHandler,imageHandler);
         sonstiges = binding.editTextTextMultiLine;
     }
 
