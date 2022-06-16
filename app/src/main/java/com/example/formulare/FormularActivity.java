@@ -93,6 +93,12 @@ public class FormularActivity extends AppCompatActivity {
             i.putExtra(Intent.EXTRA_SUBJECT, "Begehungsprotokoll - Adresse:" + headerHandler.getAdress());
             i.putExtra(Intent.EXTRA_TEXT, "Unsere Aktenzeichen: \n\n Projektnummer: " + headerHandler.getProject() +
                     "\n Auftragsnr: " + headerHandler.getOrder() + "\n\n es betreute Sie " + headerHandler.getPerson() + "\n\n E-Mail Eigentümer: " + customerHandler.getEmail());
+
+            Intent chooser = Intent.createChooser(i, "Share File");
+            List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+
+
+
             try {
                 if (file != null && (!file.exists() || !file.canRead())) {
                     Toast.makeText(FormularActivity.this, "Die PDF konnte nicht an die Email angehängt werden.", Toast.LENGTH_SHORT).show();
@@ -101,8 +107,6 @@ public class FormularActivity extends AppCompatActivity {
 
                 Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
                 i.putExtra(Intent.EXTRA_STREAM, uri);
-
-                List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(i, PackageManager.MATCH_DEFAULT_ONLY);
 
                 for (ResolveInfo resolveInfo : resInfoList) {
                     String packageName = resolveInfo.activityInfo.packageName;

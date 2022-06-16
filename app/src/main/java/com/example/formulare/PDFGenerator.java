@@ -191,6 +191,7 @@ public class PDFGenerator {
                 createPictures(canvas, uri);
             }
 
+
             pdf.finishPage(page);
             filename = "/" + headerHandler.getProject() + "-" + headerHandler.getAdress();
             file = new File(formularActivity.getApplicationContext().getFilesDir(), filename + ".pdf");
