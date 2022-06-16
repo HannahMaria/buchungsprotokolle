@@ -162,14 +162,21 @@ public class PDFGenerator {
                 page = pdf.startPage(pageInfo2);
                 pageCopy = pdfCopy.startPage(pageInfo2);
                 canvas = page.getCanvas();
-                canvasCopy = pageCopy.getCanvas();
             }else
             positionY = positionYCopy;
             createSignatures(canvas);
 
 
             //Bilder
+            pdf.finishPage(page);
+            pdfCopy.finishPage(pageCopy);
+            positionY = (float) (faktor * 19.5);
+            PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber++).create();
 
+            page = pdf.startPage(pageInfo2);
+            pageCopy = pdfCopy.startPage(pageInfo2);
+            canvas = page.getCanvas();
+            canvasCopy = pageCopy.getCanvas();
             for (Uri uri : imageHandler.mArrayUri) {
                 positionYCopy = positionY;
 
@@ -179,7 +186,7 @@ public class PDFGenerator {
                     pdf.finishPage(page);
                     pdfCopy.finishPage(pageCopy);
                     positionY = (float) (faktor * 19.5);
-                    PdfDocument.PageInfo pageInfo2 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber++).create();
+                    pageInfo2 = new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber++).create();
 
                     page = pdf.startPage(pageInfo2);
                     pageCopy = pdfCopy.startPage(pageInfo2);
@@ -503,7 +510,7 @@ public class PDFGenerator {
                 int height = picture.getHeight();
 
                 if (width > (pageWidth - abstandRand - 5)) {
-                    double factor = (double) (pageWidth - abstandRand - 5) / width;
+                    double factor = (double) (pageWidth - abstandRand *2) / width;
                     width = (int) (width * factor);
                     height = (int) (height * factor);
                 }
@@ -512,7 +519,7 @@ public class PDFGenerator {
                     width = (int) (width * factor);
                     height = (int) (height * factor);
                 }
-                canvas.drawPicture(picture, new Rect((int) abstandRand + 5, (int) (positionY += 15), (int) (abstandRand + 5 + width), (int) (positionY += height)));
+                canvas.drawPicture(picture, new Rect((int) abstandRand , (int) (positionY += 15), (int) (abstandRand  + width), (int) (positionY += height)));
             }
         } catch (IOException e) {
             e.printStackTrace();
