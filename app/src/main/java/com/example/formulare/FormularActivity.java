@@ -87,16 +87,16 @@ public class FormularActivity extends AppCompatActivity {
     public void createSendButton() {
         binding.buttonSendPdf.setOnClickListener(v -> {
             File file = pdfGenerator.generatePDF();
+            if (file != null && (file.exists() && file.canRead())) {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL, new String[]{customerHandler.getEmail(),"kusel-seith@seith-energietechnik.de"});
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{customerHandler.getEmail(), "Kusel@seith-energietechnik.de"});
             i.putExtra(Intent.EXTRA_SUBJECT, "Begehungsprotokoll - Adresse:" + headerHandler.getAdress());
             i.putExtra(Intent.EXTRA_TEXT, "Unsere Aktenzeichen: \n\n Projektnummer: " + headerHandler.getProject() +
                     "\n Auftragsnr: " + headerHandler.getOrder() + "\n\n es betreute Sie " + headerHandler.getPerson() + "\n\n E-Mail Eigentümer: " + customerHandler.getEmail());
 
             Intent chooser = Intent.createChooser(i, "Share File");
             List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
-
 
 
             try {
@@ -117,7 +117,7 @@ public class FormularActivity extends AppCompatActivity {
             } catch (android.content.ActivityNotFoundException ex) {
                 Toast.makeText(FormularActivity.this, "Es ist kein geeignetes E-Mail-Programm hinterlegt!", Toast.LENGTH_SHORT).show();
             }
-        });
+        }});
     }
 
     public void createPDFButton() {
